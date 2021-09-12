@@ -1,0 +1,21 @@
+<resources>
+    <string name="BasketballCounter">Programming1</string>
+    <string name="two_buttonB">+2 Points</string>
+    <string name="three_buttonB">+3 Points</string>
+    <string name="three_button">+3 Points</string>
+    <string name="two_button">+2 Points</string>
+    <string name="ft_button">Free Throw</string>
+    <string name="ft_buttonB">Free Throw</string>
+    <string name="reset_button">Reset</string>
+    <string name="score">0</string>
+    <string name="scoreB">0</string>
+    <string name="teamA">Team A</string>
+    <string name="teamB">Team B</string>
+    <string name="app_name">BasketballCounter</string>
+    <string name="information">
+            If a shot is successfully scored from outside of the three-point line, three points are awarded.
+If a shot is successfully scored from inside of the three-point line, two points are awarded.
+If a team is awarded a technical foul then they will receive between one and three free shots. Each shot scored will be awarded with one point. </string>
+
+
+</resources>
