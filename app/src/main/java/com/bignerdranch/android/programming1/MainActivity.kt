@@ -61,6 +61,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //testing adding a comment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate(Bundle?) called")
