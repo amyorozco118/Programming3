@@ -9,6 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Programming1">
+        <activity android:name=".SecondActivity"></activity>
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
