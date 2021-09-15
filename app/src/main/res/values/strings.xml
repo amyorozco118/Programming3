@@ -7,6 +7,8 @@
     <string name="ft_button">Free Throw</string>
     <string name="ft_buttonB">Free Throw</string>
     <string name="reset_button">Reset</string>
+    <string name="save_button">Save</string>
+    <string name="display_button">Display</string>
     <string name="score">0</string>
     <string name="scoreB">0</string>
     <string name="teamA">Team A</string>
