@@ -90,17 +90,14 @@ class MainActivity : AppCompatActivity() {
         infoButton = findViewById(R.id.info_button)
 
         //Programming 2 9/14
-        displayButton = findViewById(R.id.info_button)
-        saveButton = findViewById(R.id.info_button)
+        displayButton = findViewById(R.id.display_button)
+        saveButton = findViewById(R.id.save_button)
         savePressed = intent.getBooleanExtra(BUTTON_PRESSED, false)
 
 
         if(savedInstanceState != null){
             myBBallModel!!.setScore(true,savedInstanceState.getInt(KEY_SCORE_A, 0) )
             myBBallModel!!.setScore(false, savedInstanceState.getInt(KEY_SCORE_B, 0))
-
-//            scoreA.setText(savedInstanceState.getInt(KEY_SCORE_A, 0))
-//            scoreB.setText(savedInstanceState.getInt(KEY_SCORE_B, 0))
             updateScore(true, 0)
             updateScore(false, 0)
         }
