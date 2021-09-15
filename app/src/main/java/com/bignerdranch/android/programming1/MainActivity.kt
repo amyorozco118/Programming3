@@ -1,8 +1,7 @@
 package com.bignerdranch.android.programming1
-
-
-
 import BBallModel
+import android.app.Activity
+import android.content.Intent
 import android.graphics.ColorSpace
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -31,6 +30,11 @@ override fun onCreate(savedInstanceState: Bundle?) {
 }
  */
 
+//Project 2 vars 9/15
+private const val REQUEST_CODE_SECOND = 0
+private const val BUTTON_PRESSED = "com.bignerdranch.android.programming1.button_pressed"
+
+
 class MainActivity : AppCompatActivity() {
     private  val TAG = "MainActivity"
 
@@ -51,7 +55,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var infoButton : Button
     private  val KEY_SCORE_A = "bundle_score_a"
     private  val KEY_SCORE_B = "bundle_score_b"
+    private var savePressed = false
 
+    //Project 2 Variables - 9/14
+    private lateinit var displayButton : Button
+    private lateinit var saveButton : Button
 
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -66,9 +74,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate(Bundle?) called")
         setContentView(R.layout.activity_main)
-        //protected void onSaveInstanceState(Bundle outState)
-
-
 
         resetButton = findViewById(R.id.reset_button)
         scoreA = findViewById(R.id.scoreA)
@@ -84,8 +89,12 @@ class MainActivity : AppCompatActivity() {
         ftButtonB = findViewById(R.id.free_throwB)
         infoButton = findViewById(R.id.info_button)
 
-//        updateScore(true,0)
-//        updateScore(false,0)
+        //Programming 2 9/14
+        displayButton = findViewById(R.id.info_button)
+        saveButton = findViewById(R.id.info_button)
+        savePressed = intent.getBooleanExtra(BUTTON_PRESSED, false)
+
+
         if(savedInstanceState != null){
             myBBallModel!!.setScore(true,savedInstanceState.getInt(KEY_SCORE_A, 0) )
             myBBallModel!!.setScore(false, savedInstanceState.getInt(KEY_SCORE_B, 0))
@@ -133,19 +142,18 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+        //Programming 2 9/14
 
+        displayButton?.setOnClickListener{
 
+        }
+        saveButton?.setOnClickListener {
+            val intent = SecondActivity.newIntent(this@MainActivity, savePressed)
+            startActivityForResult(intent, REQUEST_CODE_SECOND)
 
-
-
-
-
-
+            Toast.makeText(this, "Game Information Saved!", Toast.LENGTH_SHORT).show()
+        }
     }
-
-
-
-
 
     override fun onStart() {
         super.onStart()
@@ -168,9 +176,6 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "onDestroy() called")
     }
 
-
-
-
     fun updateScore(aBool : Boolean, value :Int ){
 
         myBBallModel!!.updateScore(aBool, value)
@@ -181,10 +186,18 @@ class MainActivity : AppCompatActivity() {
         else{
             scoreB.setText(myBBallModel!!.getScore(aBool))
             }
-
-
     }
 
+    //Programming 2
+    override fun onActivityResult(requestCode:Int, resultCode:Int, data:Intent?){
+        super.onActivityResult(requestCode, resultCode, data)
 
+        if(resultCode != Activity.RESULT_OK){
+            return
+        }
 
+        if(requestCode == REQUEST_CODE_SECOND){
+            myBBallModel?.savePressed = data?.getBooleanExtra(SAVE_BUTTON_KEY, false) ?: false
+        }
+    }
 }

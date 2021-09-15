@@ -14,6 +14,7 @@ private const val TAG = "BBallViewModel"
 open class BBallModel : ViewModel() {
     var scoreA = 0
     var scoreB = 0
+    var savePressed = false
     init{
 
 
