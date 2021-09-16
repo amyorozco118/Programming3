@@ -38,36 +38,9 @@ private const val BUTTON_PRESSED = "com.bignerdranch.android.programming1.button
 class MainActivity : AppCompatActivity() {
     private  val TAG = "MainActivity"
 
-    var myBBallModel: BBallModel? =  BBallModel()
-
-    private lateinit var threeButton: Button
-    private lateinit var twoButton: Button
-    private lateinit var ftButton: Button
-
-    private lateinit var threeButtonB: Button
-    private lateinit var twoButtonB: Button
-    private lateinit var ftButtonB: Button
-
-    private lateinit var resetButton: Button
-    private lateinit var scoreA : TextView
-    private lateinit var scoreB : TextView
-
-    private lateinit var infoButton : Button
-    private  val KEY_SCORE_A = "bundle_score_a"
-    private  val KEY_SCORE_B = "bundle_score_b"
-    private var savePressed = false
-
-    //Project 2 Variables - 9/14
-    private lateinit var displayButton : Button
-    private lateinit var saveButton : Button
 
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putInt(KEY_SCORE_A, myBBallModel!!.scoreA )
-        outState.putInt(KEY_SCORE_B, myBBallModel!!.scoreB)
-        super.onSaveInstanceState(outState)
 
-    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,26 +56,7 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
     }
-    //testing adding a comment
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        Log.d(TAG, "onCreate(Bundle?) called")
-//        setContentView(R.layout.activity_main)
-//
-//        resetButton = findViewById(R.id.reset_button)
-//        scoreA = findViewById(R.id.scoreA)
-//        scoreB = findViewById(R.id.scoreB)
-//
-//        threeButton =findViewById(R.id.three_pointsA)
-//        threeButtonB =findViewById(R.id.three_pointsB)
-//
-//        twoButton = findViewById(R.id.two_pointsA)
-//        twoButtonB = findViewById(R.id.two_pointsB)
-//
-//        ftButton = findViewById(R.id.free_throwA)
-//        ftButtonB = findViewById(R.id.free_throwB)
-//        infoButton = findViewById(R.id.info_button)
-//
+
 //        //Programming 2 9/14
 //        displayButton = findViewById(R.id.display_button)
 //        saveButton = findViewById(R.id.save_button)
@@ -187,28 +141,6 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "onDestroy() called")
     }
 
-//    fun updateScore(aBool : Boolean, value :Int ){
-//
-//        myBBallModel!!.updateScore(aBool, value)
-//        if(aBool) {
-//            scoreA.setText(myBBallModel!!.getScore(aBool))
-//
-//            }
-//        else{
-//            scoreB.setText(myBBallModel!!.getScore(aBool))
-//            }
-//    }
 
-    //Programming 2
-    override fun onActivityResult(requestCode:Int, resultCode:Int, data:Intent?){
-        super.onActivityResult(requestCode, resultCode, data)
 
-        if(resultCode != Activity.RESULT_OK){
-            return
-        }
-
-        if(requestCode == REQUEST_CODE_SECOND){
-            myBBallModel?.savePressed = data?.getBooleanExtra(SAVE_BUTTON_KEY, false) ?: false
-        }
-    }
 }
