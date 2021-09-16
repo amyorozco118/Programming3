@@ -5,9 +5,6 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 
 
-private const val REQUEST_CODE_SECOND = 0
-private const val BUTTON_PRESSED = "com.bignerdranch.android.programming1.button_pressed"
-
 class MainActivity : AppCompatActivity() {
     private  val TAG = "MainActivity"
 
