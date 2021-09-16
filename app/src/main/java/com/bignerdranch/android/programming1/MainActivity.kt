@@ -1,9 +1,7 @@
 package com.bignerdranch.android.programming1
-
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-
 
 class MainActivity : AppCompatActivity() {
     private  val TAG = "MainActivity"

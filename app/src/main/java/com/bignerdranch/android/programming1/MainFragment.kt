@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import android.util.Log
+import android.widget.Toast
 
 private const val REQUEST_CODE_SECOND = 0
 private const val BUTTON_PRESSED = "com.bignerdranch.android.programming1.button_pressed"
@@ -130,14 +131,12 @@ class MainFragment: Fragment() {
 
         }
         saveButton?.setOnClickListener {
-            val intent = SecondActivity.newIntent(this@MainFragment, savePressed)
+            val intent = SecondActivity.newIntent(activity as MainActivity, savePressed)
             startActivityForResult(intent, REQUEST_CODE_SECOND)
 
             // why is the application context red? ***
-            // Toast.makeText(applicationContext, "Game Information Saved!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity as MainActivity, "Game Information Saved!", Toast.LENGTH_SHORT).show()
         }
-
-
 
         return view }
 
