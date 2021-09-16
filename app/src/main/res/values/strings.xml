@@ -18,8 +18,7 @@
             If a shot is successfully scored from outside of the three-point line, three points are awarded.
 If a shot is successfully scored from inside of the three-point line, two points are awarded.
 If a team is awarded a technical foul then they will receive between one and three free shots. Each shot scored will be awarded with one point. </string>
-    <string name="save_button">Save</string>
-    <string name="display_button">Display</string>
+
 
 
 </resources>

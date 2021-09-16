@@ -1,11 +1,8 @@
 package com.bignerdranch.android.programming1
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.MediaController
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -29,7 +26,7 @@ class SecondActivity : AppCompatActivity() {
     }
 
     companion object{
-        fun newIntent(packageContext: Context, saveIsPressed:Boolean): Intent {
+        fun newIntent(packageContext: MainFragment, saveIsPressed:Boolean): Intent {
             return Intent(packageContext, SecondActivity::class.java)
                 .apply{
                     putExtra(SAVE_BUTTON_KEY, saveIsPressed)

@@ -69,88 +69,102 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    //testing adding a comment
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG, "onCreate(Bundle?) called")
         setContentView(R.layout.activity_main)
-
-        resetButton = findViewById(R.id.reset_button)
-        scoreA = findViewById(R.id.scoreA)
-        scoreB = findViewById(R.id.scoreB)
-
-        threeButton =findViewById(R.id.three_pointsA)
-        threeButtonB =findViewById(R.id.three_pointsB)
-
-        twoButton = findViewById(R.id.two_pointsA)
-        twoButtonB = findViewById(R.id.two_pointsB)
-
-        ftButton = findViewById(R.id.free_throwA)
-        ftButtonB = findViewById(R.id.free_throwB)
-        infoButton = findViewById(R.id.info_button)
-
-        //Programming 2 9/14
-        displayButton = findViewById(R.id.display_button)
-        saveButton = findViewById(R.id.save_button)
-        savePressed = intent.getBooleanExtra(BUTTON_PRESSED, false)
-
-
-        if(savedInstanceState != null){
-            myBBallModel!!.setScore(true,savedInstanceState.getInt(KEY_SCORE_A, 0) )
-            myBBallModel!!.setScore(false, savedInstanceState.getInt(KEY_SCORE_B, 0))
-            updateScore(true, 0)
-            updateScore(false, 0)
-        }
-
-        resetButton?.setOnClickListener {this
-            myBBallModel!!.resetScore()
-            updateScore(true, 0)
-            updateScore(false, 0)
-        }
-
-        threeButton?.setOnClickListener {
-            updateScore(true, 3)
-
-        }
-        threeButtonB?.setOnClickListener {
-            updateScore(false, 3)
-        }
-
-        twoButton?.setOnClickListener {
-            updateScore(true, 2)
-        }
-
-        twoButtonB?.setOnClickListener {
-            updateScore(false, 2)
-        }
-
-        ftButton?.setOnClickListener {
-            updateScore(true, 1)
-
-        }
-        ftButtonB?.setOnClickListener {
-            updateScore(false, 1)
-        }
-
-        infoButton?.setOnClickListener{
-            Toast.makeText(applicationContext,"If a shot is successfully scored from outside of the three-point line, three points are awarded.\n" +
-                    "If a shot is successfully scored from inside of the three-point line, two points are awarded.\n" +
-                    "If a team is awarded a technical foul then they will receive between one and three free shots. Each shot scored will be awarded with one point.",Toast.LENGTH_SHORT).show()
-
-        }
-
-        //Programming 2 9/14
-
-        displayButton?.setOnClickListener{
-
-        }
-        saveButton?.setOnClickListener {
-            val intent = SecondActivity.newIntent(this@MainActivity, savePressed)
-            startActivityForResult(intent, REQUEST_CODE_SECOND)
-
-            Toast.makeText(this, "Game Information Saved!", Toast.LENGTH_SHORT).show()
+        val currentFragment =
+            supportFragmentManager.findFragmentById(R.id.fragment_container)
+        if (currentFragment == null) {
+            val fragment = MainFragment()
+            supportFragmentManager
+                .beginTransaction()
+                .add(R.id.fragment_container, fragment)
+                .commit()
         }
     }
+    //testing adding a comment
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        Log.d(TAG, "onCreate(Bundle?) called")
+//        setContentView(R.layout.activity_main)
+//
+//        resetButton = findViewById(R.id.reset_button)
+//        scoreA = findViewById(R.id.scoreA)
+//        scoreB = findViewById(R.id.scoreB)
+//
+//        threeButton =findViewById(R.id.three_pointsA)
+//        threeButtonB =findViewById(R.id.three_pointsB)
+//
+//        twoButton = findViewById(R.id.two_pointsA)
+//        twoButtonB = findViewById(R.id.two_pointsB)
+//
+//        ftButton = findViewById(R.id.free_throwA)
+//        ftButtonB = findViewById(R.id.free_throwB)
+//        infoButton = findViewById(R.id.info_button)
+//
+//        //Programming 2 9/14
+//        displayButton = findViewById(R.id.display_button)
+//        saveButton = findViewById(R.id.save_button)
+//        savePressed = intent.getBooleanExtra(BUTTON_PRESSED, false)
+//
+//
+////        if(savedInstanceState != null){
+////            myBBallModel!!.setScore(true,savedInstanceState.getInt(KEY_SCORE_A, 0) )
+////            myBBallModel!!.setScore(false, savedInstanceState.getInt(KEY_SCORE_B, 0))
+////            updateScore(true, 0)
+////            updateScore(false, 0)
+////        }
+//
+////        resetButton?.setOnClickListener {this
+////            myBBallModel!!.resetScore()
+////            updateScore(true, 0)
+////            updateScore(false, 0)
+////        }
+////
+////        threeButton?.setOnClickListener {
+////            updateScore(true, 3)
+////
+////        }
+////        threeButtonB?.setOnClickListener {
+////            updateScore(false, 3)
+////        }
+////
+////        twoButton?.setOnClickListener {
+////            updateScore(true, 2)
+////        }
+////
+////        twoButtonB?.setOnClickListener {
+////            updateScore(false, 2)
+////        }
+////
+////        ftButton?.setOnClickListener {
+////            updateScore(true, 1)
+////
+////        }
+////        ftButtonB?.setOnClickListener {
+////            updateScore(false, 1)
+////        }
+////
+////        infoButton?.setOnClickListener{
+////            Toast.makeText(applicationContext,"If a shot is successfully scored from outside of the three-point line, three points are awarded.\n" +
+////                    "If a shot is successfully scored from inside of the three-point line, two points are awarded.\n" +
+////                    "If a team is awarded a technical foul then they will receive between one and three free shots. Each shot scored will be awarded with one point.",Toast.LENGTH_SHORT).show()
+////
+////        }
+//
+//        //Programming 2 9/14
+//
+//        displayButton?.setOnClickListener{
+//
+//        }
+//        saveButton?.setOnClickListener {
+//            val intent = SecondActivity.newIntent(this@MainActivity, savePressed)
+//            startActivityForResult(intent, REQUEST_CODE_SECOND)
+//
+//            Toast.makeText(this, "Game Information Saved!", Toast.LENGTH_SHORT).show()
+//        }
+//    }
 
     override fun onStart() {
         super.onStart()
@@ -173,17 +187,17 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "onDestroy() called")
     }
 
-    fun updateScore(aBool : Boolean, value :Int ){
-
-        myBBallModel!!.updateScore(aBool, value)
-        if(aBool) {
-            scoreA.setText(myBBallModel!!.getScore(aBool))
-
-            }
-        else{
-            scoreB.setText(myBBallModel!!.getScore(aBool))
-            }
-    }
+//    fun updateScore(aBool : Boolean, value :Int ){
+//
+//        myBBallModel!!.updateScore(aBool, value)
+//        if(aBool) {
+//            scoreA.setText(myBBallModel!!.getScore(aBool))
+//
+//            }
+//        else{
+//            scoreB.setText(myBBallModel!!.getScore(aBool))
+//            }
+//    }
 
     //Programming 2
     override fun onActivityResult(requestCode:Int, resultCode:Int, data:Intent?){
