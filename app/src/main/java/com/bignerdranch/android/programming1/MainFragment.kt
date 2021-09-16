@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import android.util.Log
 
@@ -78,8 +77,9 @@ class MainFragment: Fragment() {
 
         displayButton = view.findViewById(R.id.display_button)
         saveButton = view.findViewById(R.id.save_button)
-        //***
-       savePressed = intent.getBooleanExtra(BUTTON_PRESSED, false)
+
+        //why is this intent red???? ***
+        //savePressed = intent.getBooleanExtra(BUTTON_PRESSED, false)
 
         if(savedInstanceState != null){
             myBBallModel!!.setScore(true,savedInstanceState.getInt(KEY_SCORE_A, 0) )
@@ -133,7 +133,8 @@ class MainFragment: Fragment() {
             val intent = SecondActivity.newIntent(this@MainFragment, savePressed)
             startActivityForResult(intent, REQUEST_CODE_SECOND)
 
-            //Toast.makeText(applicationContext, "Game Information Saved!", Toast.LENGTH_SHORT).show()
+            // why is the application context red? ***
+            // Toast.makeText(applicationContext, "Game Information Saved!", Toast.LENGTH_SHORT).show()
         }
 
 
