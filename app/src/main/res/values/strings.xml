@@ -14,6 +14,9 @@
     <string name="teamA">Team A</string>
     <string name="teamB">Team B</string>
     <string name="app_name">BasketballCounter</string>
+    <string name="game_title">Game Title</string>
+    <string name="game_date">Game Date</string>
+
     <string name="information">
             If a shot is successfully scored from outside of the three-point line, three points are awarded.
 If a shot is successfully scored from inside of the three-point line, two points are awarded.
