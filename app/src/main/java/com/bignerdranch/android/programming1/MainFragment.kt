@@ -1,6 +1,8 @@
 package com.bignerdranch.android.programming1
 
 import BBallModel
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +20,6 @@ class MainFragment: Fragment() {
     private  val TAG = "MainFragment"
     var myBBallModel: BBallModel? =  BBallModel()
 
-    private lateinit var main : MainActivity
     private lateinit var threeButton: Button
     private lateinit var twoButton: Button
     private lateinit var ftButton: Button
@@ -39,18 +40,25 @@ class MainFragment: Fragment() {
     //Project 2 Variables - 9/14
     private lateinit var displayButton : Button
     private lateinit var saveButton : Button
+    private lateinit var fragmentM : MainFragment
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "Fragment Started")
+        fragmentM = MainFragment()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putInt(KEY_SCORE_A, myBBallModel!!.scoreA )
+        outState.putInt(KEY_SCORE_B, myBBallModel!!.scoreB)
+        super.onSaveInstanceState(outState)
 
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-
-
-
     ): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
         resetButton = view.findViewById(R.id.reset_button)
@@ -65,12 +73,13 @@ class MainFragment: Fragment() {
 
         ftButton = view.findViewById(R.id.free_throwA)
         ftButtonB = view.findViewById(R.id.free_throwB)
+
         infoButton = view.findViewById(R.id.info_button)
 
-        //Programming 2 9/14
         displayButton = view.findViewById(R.id.display_button)
         saveButton = view.findViewById(R.id.save_button)
-
+        //***
+       savePressed = intent.getBooleanExtra(BUTTON_PRESSED, false)
 
         if(savedInstanceState != null){
             myBBallModel!!.setScore(true,savedInstanceState.getInt(KEY_SCORE_A, 0) )
@@ -124,7 +133,7 @@ class MainFragment: Fragment() {
             val intent = SecondActivity.newIntent(this@MainFragment, savePressed)
             startActivityForResult(intent, REQUEST_CODE_SECOND)
 
-            Toast.makeText(applicationContext, "Game Information Saved!", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(applicationContext, "Game Information Saved!", Toast.LENGTH_SHORT).show()
         }
 
 
@@ -143,8 +152,16 @@ class MainFragment: Fragment() {
         }
     }
 
+    override fun onActivityResult(requestCode:Int, resultCode:Int, data:Intent?){
+        super.onActivityResult(requestCode, resultCode, data)
 
+        if(resultCode != Activity.RESULT_OK){
+            return
+        }
 
-
+        if(requestCode == REQUEST_CODE_SECOND){
+            myBBallModel?.savePressed = data?.getBooleanExtra(SAVE_BUTTON_KEY, false) ?: false
+        }
+    }
 
 }
