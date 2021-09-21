@@ -5,11 +5,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.list_item_game.*
 
 private const val TAG = "GameInfpFragment"
 class GameInfoFragment : Fragment() {
@@ -50,11 +52,33 @@ class GameInfoFragment : Fragment() {
     }
     private inner class GameHolder(view: View)
         : RecyclerView.ViewHolder(view) {
+
+        private lateinit var game: Game
+        private val teamImageView: ImageView = itemView.findViewById(R.id.teamImageView)
         val titleTextView: TextView = itemView.findViewById(R.id.game_title)
         val dateTextView: TextView = itemView.findViewById(R.id.game_date)
+
+        init {
+            itemView.setOnClickListener(this)
+        }
+
+        fun bind(game: Game){
+            this.game = game
+            game_title.text = this.game.index
+            game_date.text = this.game.date.toString()
+
+            teamImageView.visibility = if(game.scoreA.toInt() > game.scoreB.toInt()) {
+                View.VISIBLE
+            }else{
+                View.GONE
+            }
+        }
+
+
     }
     private inner class GameAdapter(var games: List<Game>)
         : RecyclerView.Adapter<GameHolder>() {
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)
                 : GameHolder {
             val view = layoutInflater.inflate(R.layout.list_item_game, parent, false)

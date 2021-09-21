@@ -38,7 +38,6 @@ class MainFragment: Fragment() {
     private  val KEY_SCORE_B = "bundle_score_b"
     private var savePressed = false
 
-    //Project 2 Variables - 9/14
     private lateinit var displayButton : Button
     private lateinit var saveButton : Button
     private lateinit var fragmentM : MainFragment
@@ -53,7 +52,6 @@ class MainFragment: Fragment() {
         outState.putInt(KEY_SCORE_A, myBBallModel!!.scoreA )
         outState.putInt(KEY_SCORE_B, myBBallModel!!.scoreB)
         super.onSaveInstanceState(outState)
-
     }
 
     override fun onCreateView(
@@ -90,48 +88,48 @@ class MainFragment: Fragment() {
             updateScore(false, 0)
         }
 
-        resetButton?.setOnClickListener {this
+        resetButton.setOnClickListener {this
             myBBallModel!!.resetScore()
             updateScore(true, 0)
             updateScore(false, 0)
         }
 
-        threeButton?.setOnClickListener {
+        threeButton.setOnClickListener {
             updateScore(true, 3)
 
         }
-        threeButtonB?.setOnClickListener {
+        threeButtonB.setOnClickListener {
             updateScore(false, 3)
         }
 
-        twoButton?.setOnClickListener {
+        twoButton.setOnClickListener {
             updateScore(true, 2)
         }
 
-        twoButtonB?.setOnClickListener {
+        twoButtonB.setOnClickListener {
             updateScore(false, 2)
         }
 
-        ftButton?.setOnClickListener {
+        ftButton.setOnClickListener {
             updateScore(true, 1)
-
         }
-        ftButtonB?.setOnClickListener {
+
+        ftButtonB.setOnClickListener {
             updateScore(false, 1)
         }
 
-        infoButton?.setOnClickListener{
+        infoButton.setOnClickListener{
 //            Toast.makeText(applicationContext,"If a shot is successfully scored from outside of the three-point line, three points are awarded.\n" +
 //                    "If a shot is successfully scored from inside of the three-point line, two points are awarded.\n" +
 //                    "If a team is awarded a technical foul then they will receive between one and three free shots. Each shot scored will be awarded with one point.",
 //                Toast.LENGTH_SHORT).show()
+        }
+
+        displayButton.setOnClickListener{
 
         }
 
-        displayButton?.setOnClickListener{
-
-        }
-        saveButton?.setOnClickListener {
+        saveButton.setOnClickListener {
             val intent = SecondActivity.newIntent(activity as MainActivity, savePressed)
             startActivityForResult(intent, REQUEST_CODE_SECOND)
 
