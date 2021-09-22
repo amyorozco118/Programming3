@@ -7,13 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.list_item_game.*
 
-private const val TAG = "GameInfpFragment"
+private const val TAG = "GameInfoFragment"
 class GameInfoFragment : Fragment() {
     private lateinit var gameRecyclerView: RecyclerView
     private var adapter: GameAdapter? = null
@@ -51,27 +52,34 @@ class GameInfoFragment : Fragment() {
         gameRecyclerView.adapter = adapter
     }
     private inner class GameHolder(view: View)
-        : RecyclerView.ViewHolder(view) {
+        : RecyclerView.ViewHolder(view), View.OnClickListener {
 
         private lateinit var game: Game
-        private val teamImageView: ImageView = itemView.findViewById(R.id.teamImageView)
+
         val titleTextView: TextView = itemView.findViewById(R.id.game_title)
         val dateTextView: TextView = itemView.findViewById(R.id.game_date)
 
+        private val teamImageView: ImageView = itemView.findViewById(R.id.teamImageView)
+
         init {
-        //    itemView.setOnClickListener(this)
+           itemView.setOnClickListener(this)
         }
 
         fun bind(game: Game){
             this.game = game
-            game_title.text = this.game.index
-            game_date.text = this.game.date.toString()
+            titleTextView.text = this.game.index
+            dateTextView.text = this.game.date.toString()
 
-            teamImageView.visibility = if(game.scoreA.toInt() > game.scoreB.toInt()) {
-                View.VISIBLE
-            }else{
-                View.GONE
-            }
+            teamImageView.visibility = View.VISIBLE
+//             if(game.scoreA.toInt() > game.scoreB.toInt()) {
+//                View.VISIBLE
+//            }else{
+//                View.VISIBLE
+//            }
+        }
+
+        override fun onClick(p0: View?) {
+            Toast.makeText(context, "${game.teamA} clicked", Toast.LENGTH_SHORT).show()
         }
 
 
@@ -89,10 +97,9 @@ class GameInfoFragment : Fragment() {
         }
         override fun onBindViewHolder(holder: GameHolder, position: Int) {
             val game = games[position]
-            holder.apply {
-                titleTextView.text = game.index
-                dateTextView.text = game.date.toString()
-            }
+            holder.bind(game)
         } }
+
+
 
 }
