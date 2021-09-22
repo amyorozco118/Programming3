@@ -7,7 +7,9 @@ class GameInfoModel : ViewModel(){
     init {
         for (i in 0 until 100) {
             val game = Game()
-            game.index = "Crime #$i"
+            game.index = "Game #$i"
+            game.scoreA = 2
+            game.scoreB = 1
             listOfGames += game
         } }
 
