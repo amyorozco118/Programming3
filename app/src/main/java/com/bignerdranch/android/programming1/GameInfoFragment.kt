@@ -59,7 +59,7 @@ class GameInfoFragment : Fragment() {
         val dateTextView: TextView = itemView.findViewById(R.id.game_date)
 
         init {
-            //itemView.setOnClickListener(this)
+        //    itemView.setOnClickListener(this)
         }
 
         fun bind(game: Game){
@@ -67,10 +67,10 @@ class GameInfoFragment : Fragment() {
             game_title.text = this.game.index
             game_date.text = this.game.date.toString()
 
-            teamImageView.visibility = if(game.scoreA >0) {
+            teamImageView.visibility = if(game.scoreA.toInt() > game.scoreB.toInt()) {
                 View.VISIBLE
             }else{
-                View.VISIBLE
+                View.GONE
             }
         }
 
