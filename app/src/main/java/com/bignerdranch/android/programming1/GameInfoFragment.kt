@@ -59,7 +59,7 @@ class GameInfoFragment : Fragment() {
         val dateTextView: TextView = itemView.findViewById(R.id.game_date)
 
         init {
-            itemView.setOnClickListener(this)
+        //    itemView.setOnClickListener(this)
         }
 
         fun bind(game: Game){
