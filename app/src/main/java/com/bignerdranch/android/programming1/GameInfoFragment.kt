@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.list_item_game.*
 
 private const val TAG = "GameInfoFragment"
 class GameInfoFragment : Fragment() {
@@ -46,11 +45,13 @@ class GameInfoFragment : Fragment() {
 
         return view
     }
+
     private fun updateUI() {
         val games = gameInfoModel.listOfGames
         adapter = GameAdapter(games)
         gameRecyclerView.adapter = adapter
     }
+
     private inner class GameHolder(view: View)
         : RecyclerView.ViewHolder(view), View.OnClickListener {
 
@@ -70,20 +71,22 @@ class GameInfoFragment : Fragment() {
             titleTextView.text = this.game.index
             dateTextView.text = this.game.date.toString()
 
+
+            //DO NOT TOUCH THIS CODE SADIE!!!!!!!
+            if(game.scoreA > game.scoreB) {
+                teamImageView.setImageResource(R.drawable.fiiiiish)
+             }else{
+                teamImageView.setImageResource(R.drawable.catherine)
+            }
+
             teamImageView.visibility = View.VISIBLE
-//             if(game.scoreA.toInt() > game.scoreB.toInt()) {
-//                View.VISIBLE
-//            }else{
-//                View.VISIBLE
-//            }
         }
 
         override fun onClick(p0: View?) {
             Toast.makeText(context, "${game.teamA} clicked", Toast.LENGTH_SHORT).show()
         }
-
-
     }
+
     private inner class GameAdapter(var games: List<Game>)
         : RecyclerView.Adapter<GameHolder>() {
 
@@ -99,7 +102,4 @@ class GameInfoFragment : Fragment() {
             val game = games[position]
             holder.bind(game)
         } }
-
-
-
 }
