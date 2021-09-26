@@ -26,10 +26,11 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textView3"
+                <EditText
+                    android:id="@+id/teamA"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:inputType="text"
                     android:text="@string/teamA"  />
 
                 <TextView
@@ -65,10 +66,11 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/team"
+                <EditText
+                    android:id="@+id/teamB"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:inputType="text"
                     android:text="@string/teamB"  />
 
                 <TextView
