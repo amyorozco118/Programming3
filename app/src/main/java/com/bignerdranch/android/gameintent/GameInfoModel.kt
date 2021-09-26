@@ -10,21 +10,19 @@ class GameInfoModel : ViewModel(){
 
     fun addRandomGame(){
         val game = Game()
-        game.index = "0"
 
-        game.scoreA = Random.nextInt(0,20)
-        game.scoreB = Random.nextInt(0,20)
+        game.teamAScore = Random.nextInt(0,20)
+        game.teamBScore = Random.nextInt(0,20)
 
         listOfGames += game
     }
 
-    fun saveGame(teamNameA : String, teamNameB : String){
+    fun saveGame(teamAName : String, teamBName : String, teamAScore: Int, teamBScore :Int){
         val game = Game()
-        game.index = "Team A: " + teamNameA + " Team B: " + teamNameB
-        game.scoreA = Random.nextInt(0,20)
-        game.scoreB = Random.nextInt(0,20)
-
+        game.teamAName = teamAName
+        game.teamBName = teamBName
+        game.teamAScore = teamAScore
+        game.teamBScore = teamBScore
         listOfGames += game
-
     }
 }

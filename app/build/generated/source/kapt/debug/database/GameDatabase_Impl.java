@@ -37,14 +37,14 @@ public final class GameDatabase_Impl extends GameDatabase {
     final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(configuration, new RoomOpenHelper.Delegate(1) {
       @Override
       public void createAllTables(SupportSQLiteDatabase _db) {
-        _db.execSQL("CREATE TABLE IF NOT EXISTS `Game` (`id` TEXT NOT NULL, `teamA` TEXT NOT NULL, `teamB` TEXT NOT NULL, `date` INTEGER NOT NULL, `scoreA` INTEGER NOT NULL, `scoreB` INTEGER NOT NULL, `index` TEXT NOT NULL, PRIMARY KEY(`id`))");
+        _db.execSQL("CREATE TABLE IF NOT EXISTS `table_game` (`id` TEXT NOT NULL, `teamAName` TEXT NOT NULL, `teamBName` TEXT NOT NULL, `teamAScore` INTEGER NOT NULL, `teamBScore` INTEGER NOT NULL, `date` INTEGER NOT NULL, PRIMARY KEY(`id`))");
         _db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        _db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '05bba3016859162d2701fbd8c3a13565')");
+        _db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8de65af9adacbea49db8bab4badbfd3b')");
       }
 
       @Override
       public void dropAllTables(SupportSQLiteDatabase _db) {
-        _db.execSQL("DROP TABLE IF EXISTS `Game`");
+        _db.execSQL("DROP TABLE IF EXISTS `table_game`");
         if (mCallbacks != null) {
           for (int _i = 0, _size = mCallbacks.size(); _i < _size; _i++) {
             mCallbacks.get(_i).onDestructiveMigration(_db);
@@ -83,26 +83,25 @@ public final class GameDatabase_Impl extends GameDatabase {
 
       @Override
       protected RoomOpenHelper.ValidationResult onValidateSchema(SupportSQLiteDatabase _db) {
-        final HashMap<String, TableInfo.Column> _columnsGame = new HashMap<String, TableInfo.Column>(7);
-        _columnsGame.put("id", new TableInfo.Column("id", "TEXT", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsGame.put("teamA", new TableInfo.Column("teamA", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsGame.put("teamB", new TableInfo.Column("teamB", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsGame.put("date", new TableInfo.Column("date", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsGame.put("scoreA", new TableInfo.Column("scoreA", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsGame.put("scoreB", new TableInfo.Column("scoreB", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsGame.put("index", new TableInfo.Column("index", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        final HashSet<TableInfo.ForeignKey> _foreignKeysGame = new HashSet<TableInfo.ForeignKey>(0);
-        final HashSet<TableInfo.Index> _indicesGame = new HashSet<TableInfo.Index>(0);
-        final TableInfo _infoGame = new TableInfo("Game", _columnsGame, _foreignKeysGame, _indicesGame);
-        final TableInfo _existingGame = TableInfo.read(_db, "Game");
-        if (! _infoGame.equals(_existingGame)) {
-          return new RoomOpenHelper.ValidationResult(false, "Game(com.bignerdranch.android.gameintent.Game).\n"
-                  + " Expected:\n" + _infoGame + "\n"
-                  + " Found:\n" + _existingGame);
+        final HashMap<String, TableInfo.Column> _columnsTableGame = new HashMap<String, TableInfo.Column>(6);
+        _columnsTableGame.put("id", new TableInfo.Column("id", "TEXT", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsTableGame.put("teamAName", new TableInfo.Column("teamAName", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsTableGame.put("teamBName", new TableInfo.Column("teamBName", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsTableGame.put("teamAScore", new TableInfo.Column("teamAScore", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsTableGame.put("teamBScore", new TableInfo.Column("teamBScore", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsTableGame.put("date", new TableInfo.Column("date", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        final HashSet<TableInfo.ForeignKey> _foreignKeysTableGame = new HashSet<TableInfo.ForeignKey>(0);
+        final HashSet<TableInfo.Index> _indicesTableGame = new HashSet<TableInfo.Index>(0);
+        final TableInfo _infoTableGame = new TableInfo("table_game", _columnsTableGame, _foreignKeysTableGame, _indicesTableGame);
+        final TableInfo _existingTableGame = TableInfo.read(_db, "table_game");
+        if (! _infoTableGame.equals(_existingTableGame)) {
+          return new RoomOpenHelper.ValidationResult(false, "table_game(com.bignerdranch.android.gameintent.Game).\n"
+                  + " Expected:\n" + _infoTableGame + "\n"
+                  + " Found:\n" + _existingTableGame);
         }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "05bba3016859162d2701fbd8c3a13565", "8158cdeb4ae7692fc2441b0afba0fcad");
+    }, "8de65af9adacbea49db8bab4badbfd3b", "d43d5f2830b2e3f5618bf889285d778a");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(configuration.context)
         .name(configuration.name)
         .callback(_openCallback)
@@ -115,7 +114,7 @@ public final class GameDatabase_Impl extends GameDatabase {
   protected InvalidationTracker createInvalidationTracker() {
     final HashMap<String, String> _shadowTablesMap = new HashMap<String, String>(0);
     HashMap<String, Set<String>> _viewTables = new HashMap<String, Set<String>>(0);
-    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "Game");
+    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "table_game");
   }
 
   @Override
@@ -124,7 +123,7 @@ public final class GameDatabase_Impl extends GameDatabase {
     final SupportSQLiteDatabase _db = super.getOpenHelper().getWritableDatabase();
     try {
       super.beginTransaction();
-      _db.execSQL("DELETE FROM `Game`");
+      _db.execSQL("DELETE FROM `table_game`");
       super.setTransactionSuccessful();
     } finally {
       super.endTransaction();

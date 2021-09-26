@@ -13,10 +13,10 @@ import java.util.UUID;
 @Dao
 interface GameDao {
 
-    @Query("SELECT * FROM game")
+    @Query("SELECT * FROM table_game")
     fun getGames(): LiveData<List<Game>>
 
-    @Query("SELECT * FROM game WHERE id=(:id)")
+    @Query("SELECT * FROM table_game WHERE id=(:id)")
     fun getGame(id: UUID): LiveData<Game?>
 
     @Update

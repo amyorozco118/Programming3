@@ -38,7 +38,7 @@ public final class GameDao_Impl implements GameDao {
     this.__insertionAdapterOfGame = new EntityInsertionAdapter<Game>(__db) {
       @Override
       public String createQuery() {
-        return "INSERT OR ABORT INTO `Game` (`id`,`teamA`,`teamB`,`date`,`scoreA`,`scoreB`,`index`) VALUES (?,?,?,?,?,?,?)";
+        return "INSERT OR ABORT INTO `table_game` (`id`,`teamAName`,`teamBName`,`teamAScore`,`teamBScore`,`date`) VALUES (?,?,?,?,?,?)";
       }
 
       @Override
@@ -50,36 +50,31 @@ public final class GameDao_Impl implements GameDao {
         } else {
           stmt.bindString(1, _tmp);
         }
-        if (value.getTeamA() == null) {
+        if (value.getTeamAName() == null) {
           stmt.bindNull(2);
         } else {
-          stmt.bindString(2, value.getTeamA());
+          stmt.bindString(2, value.getTeamAName());
         }
-        if (value.getTeamB() == null) {
+        if (value.getTeamBName() == null) {
           stmt.bindNull(3);
         } else {
-          stmt.bindString(3, value.getTeamB());
+          stmt.bindString(3, value.getTeamBName());
         }
+        stmt.bindLong(4, value.getTeamAScore());
+        stmt.bindLong(5, value.getTeamBScore());
         final Long _tmp_1;
         _tmp_1 = __gameTypeConverters.fromDate(value.getDate());
         if (_tmp_1 == null) {
-          stmt.bindNull(4);
+          stmt.bindNull(6);
         } else {
-          stmt.bindLong(4, _tmp_1);
-        }
-        stmt.bindLong(5, value.getScoreA());
-        stmt.bindLong(6, value.getScoreB());
-        if (value.getIndex() == null) {
-          stmt.bindNull(7);
-        } else {
-          stmt.bindString(7, value.getIndex());
+          stmt.bindLong(6, _tmp_1);
         }
       }
     };
     this.__updateAdapterOfGame = new EntityDeletionOrUpdateAdapter<Game>(__db) {
       @Override
       public String createQuery() {
-        return "UPDATE OR ABORT `Game` SET `id` = ?,`teamA` = ?,`teamB` = ?,`date` = ?,`scoreA` = ?,`scoreB` = ?,`index` = ? WHERE `id` = ?";
+        return "UPDATE OR ABORT `table_game` SET `id` = ?,`teamAName` = ?,`teamBName` = ?,`teamAScore` = ?,`teamBScore` = ?,`date` = ? WHERE `id` = ?";
       }
 
       @Override
@@ -91,36 +86,31 @@ public final class GameDao_Impl implements GameDao {
         } else {
           stmt.bindString(1, _tmp);
         }
-        if (value.getTeamA() == null) {
+        if (value.getTeamAName() == null) {
           stmt.bindNull(2);
         } else {
-          stmt.bindString(2, value.getTeamA());
+          stmt.bindString(2, value.getTeamAName());
         }
-        if (value.getTeamB() == null) {
+        if (value.getTeamBName() == null) {
           stmt.bindNull(3);
         } else {
-          stmt.bindString(3, value.getTeamB());
+          stmt.bindString(3, value.getTeamBName());
         }
+        stmt.bindLong(4, value.getTeamAScore());
+        stmt.bindLong(5, value.getTeamBScore());
         final Long _tmp_1;
         _tmp_1 = __gameTypeConverters.fromDate(value.getDate());
         if (_tmp_1 == null) {
-          stmt.bindNull(4);
+          stmt.bindNull(6);
         } else {
-          stmt.bindLong(4, _tmp_1);
-        }
-        stmt.bindLong(5, value.getScoreA());
-        stmt.bindLong(6, value.getScoreB());
-        if (value.getIndex() == null) {
-          stmt.bindNull(7);
-        } else {
-          stmt.bindString(7, value.getIndex());
+          stmt.bindLong(6, _tmp_1);
         }
         final String _tmp_2;
         _tmp_2 = __gameTypeConverters.fromUUID(value.getId());
         if (_tmp_2 == null) {
-          stmt.bindNull(8);
+          stmt.bindNull(7);
         } else {
-          stmt.bindString(8, _tmp_2);
+          stmt.bindString(7, _tmp_2);
         }
       }
     };
@@ -152,20 +142,19 @@ public final class GameDao_Impl implements GameDao {
 
   @Override
   public LiveData<List<Game>> getGames() {
-    final String _sql = "SELECT * FROM game";
+    final String _sql = "SELECT * FROM table_game";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
-    return __db.getInvalidationTracker().createLiveData(new String[]{"game"}, false, new Callable<List<Game>>() {
+    return __db.getInvalidationTracker().createLiveData(new String[]{"table_game"}, false, new Callable<List<Game>>() {
       @Override
       public List<Game> call() throws Exception {
         final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
         try {
           final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
-          final int _cursorIndexOfTeamA = CursorUtil.getColumnIndexOrThrow(_cursor, "teamA");
-          final int _cursorIndexOfTeamB = CursorUtil.getColumnIndexOrThrow(_cursor, "teamB");
+          final int _cursorIndexOfTeamAName = CursorUtil.getColumnIndexOrThrow(_cursor, "teamAName");
+          final int _cursorIndexOfTeamBName = CursorUtil.getColumnIndexOrThrow(_cursor, "teamBName");
+          final int _cursorIndexOfTeamAScore = CursorUtil.getColumnIndexOrThrow(_cursor, "teamAScore");
+          final int _cursorIndexOfTeamBScore = CursorUtil.getColumnIndexOrThrow(_cursor, "teamBScore");
           final int _cursorIndexOfDate = CursorUtil.getColumnIndexOrThrow(_cursor, "date");
-          final int _cursorIndexOfScoreA = CursorUtil.getColumnIndexOrThrow(_cursor, "scoreA");
-          final int _cursorIndexOfScoreB = CursorUtil.getColumnIndexOrThrow(_cursor, "scoreB");
-          final int _cursorIndexOfIndex = CursorUtil.getColumnIndexOrThrow(_cursor, "index");
           final List<Game> _result = new ArrayList<Game>(_cursor.getCount());
           while(_cursor.moveToNext()) {
             final Game _item;
@@ -177,18 +166,22 @@ public final class GameDao_Impl implements GameDao {
               _tmp = _cursor.getString(_cursorIndexOfId);
             }
             _tmpId = __gameTypeConverters.toUUID(_tmp);
-            final String _tmpTeamA;
-            if (_cursor.isNull(_cursorIndexOfTeamA)) {
-              _tmpTeamA = null;
+            final String _tmpTeamAName;
+            if (_cursor.isNull(_cursorIndexOfTeamAName)) {
+              _tmpTeamAName = null;
             } else {
-              _tmpTeamA = _cursor.getString(_cursorIndexOfTeamA);
+              _tmpTeamAName = _cursor.getString(_cursorIndexOfTeamAName);
             }
-            final String _tmpTeamB;
-            if (_cursor.isNull(_cursorIndexOfTeamB)) {
-              _tmpTeamB = null;
+            final String _tmpTeamBName;
+            if (_cursor.isNull(_cursorIndexOfTeamBName)) {
+              _tmpTeamBName = null;
             } else {
-              _tmpTeamB = _cursor.getString(_cursorIndexOfTeamB);
+              _tmpTeamBName = _cursor.getString(_cursorIndexOfTeamBName);
             }
+            final int _tmpTeamAScore;
+            _tmpTeamAScore = _cursor.getInt(_cursorIndexOfTeamAScore);
+            final int _tmpTeamBScore;
+            _tmpTeamBScore = _cursor.getInt(_cursorIndexOfTeamBScore);
             final Date _tmpDate;
             final Long _tmp_1;
             if (_cursor.isNull(_cursorIndexOfDate)) {
@@ -197,17 +190,7 @@ public final class GameDao_Impl implements GameDao {
               _tmp_1 = _cursor.getLong(_cursorIndexOfDate);
             }
             _tmpDate = __gameTypeConverters.toDate(_tmp_1);
-            final int _tmpScoreA;
-            _tmpScoreA = _cursor.getInt(_cursorIndexOfScoreA);
-            final int _tmpScoreB;
-            _tmpScoreB = _cursor.getInt(_cursorIndexOfScoreB);
-            final String _tmpIndex;
-            if (_cursor.isNull(_cursorIndexOfIndex)) {
-              _tmpIndex = null;
-            } else {
-              _tmpIndex = _cursor.getString(_cursorIndexOfIndex);
-            }
-            _item = new Game(_tmpId,_tmpTeamA,_tmpTeamB,_tmpDate,_tmpScoreA,_tmpScoreB,_tmpIndex);
+            _item = new Game(_tmpId,_tmpTeamAName,_tmpTeamBName,_tmpTeamAScore,_tmpTeamBScore,_tmpDate);
             _result.add(_item);
           }
           return _result;
@@ -225,7 +208,7 @@ public final class GameDao_Impl implements GameDao {
 
   @Override
   public LiveData<Game> getGame(final UUID id) {
-    final String _sql = "SELECT * FROM game WHERE id=(?)";
+    final String _sql = "SELECT * FROM table_game WHERE id=(?)";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
     int _argIndex = 1;
     final String _tmp;
@@ -235,18 +218,17 @@ public final class GameDao_Impl implements GameDao {
     } else {
       _statement.bindString(_argIndex, _tmp);
     }
-    return __db.getInvalidationTracker().createLiveData(new String[]{"game"}, false, new Callable<Game>() {
+    return __db.getInvalidationTracker().createLiveData(new String[]{"table_game"}, false, new Callable<Game>() {
       @Override
       public Game call() throws Exception {
         final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
         try {
           final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
-          final int _cursorIndexOfTeamA = CursorUtil.getColumnIndexOrThrow(_cursor, "teamA");
-          final int _cursorIndexOfTeamB = CursorUtil.getColumnIndexOrThrow(_cursor, "teamB");
+          final int _cursorIndexOfTeamAName = CursorUtil.getColumnIndexOrThrow(_cursor, "teamAName");
+          final int _cursorIndexOfTeamBName = CursorUtil.getColumnIndexOrThrow(_cursor, "teamBName");
+          final int _cursorIndexOfTeamAScore = CursorUtil.getColumnIndexOrThrow(_cursor, "teamAScore");
+          final int _cursorIndexOfTeamBScore = CursorUtil.getColumnIndexOrThrow(_cursor, "teamBScore");
           final int _cursorIndexOfDate = CursorUtil.getColumnIndexOrThrow(_cursor, "date");
-          final int _cursorIndexOfScoreA = CursorUtil.getColumnIndexOrThrow(_cursor, "scoreA");
-          final int _cursorIndexOfScoreB = CursorUtil.getColumnIndexOrThrow(_cursor, "scoreB");
-          final int _cursorIndexOfIndex = CursorUtil.getColumnIndexOrThrow(_cursor, "index");
           final Game _result;
           if(_cursor.moveToFirst()) {
             final UUID _tmpId;
@@ -257,18 +239,22 @@ public final class GameDao_Impl implements GameDao {
               _tmp_1 = _cursor.getString(_cursorIndexOfId);
             }
             _tmpId = __gameTypeConverters.toUUID(_tmp_1);
-            final String _tmpTeamA;
-            if (_cursor.isNull(_cursorIndexOfTeamA)) {
-              _tmpTeamA = null;
+            final String _tmpTeamAName;
+            if (_cursor.isNull(_cursorIndexOfTeamAName)) {
+              _tmpTeamAName = null;
             } else {
-              _tmpTeamA = _cursor.getString(_cursorIndexOfTeamA);
+              _tmpTeamAName = _cursor.getString(_cursorIndexOfTeamAName);
             }
-            final String _tmpTeamB;
-            if (_cursor.isNull(_cursorIndexOfTeamB)) {
-              _tmpTeamB = null;
+            final String _tmpTeamBName;
+            if (_cursor.isNull(_cursorIndexOfTeamBName)) {
+              _tmpTeamBName = null;
             } else {
-              _tmpTeamB = _cursor.getString(_cursorIndexOfTeamB);
+              _tmpTeamBName = _cursor.getString(_cursorIndexOfTeamBName);
             }
+            final int _tmpTeamAScore;
+            _tmpTeamAScore = _cursor.getInt(_cursorIndexOfTeamAScore);
+            final int _tmpTeamBScore;
+            _tmpTeamBScore = _cursor.getInt(_cursorIndexOfTeamBScore);
             final Date _tmpDate;
             final Long _tmp_2;
             if (_cursor.isNull(_cursorIndexOfDate)) {
@@ -277,17 +263,7 @@ public final class GameDao_Impl implements GameDao {
               _tmp_2 = _cursor.getLong(_cursorIndexOfDate);
             }
             _tmpDate = __gameTypeConverters.toDate(_tmp_2);
-            final int _tmpScoreA;
-            _tmpScoreA = _cursor.getInt(_cursorIndexOfScoreA);
-            final int _tmpScoreB;
-            _tmpScoreB = _cursor.getInt(_cursorIndexOfScoreB);
-            final String _tmpIndex;
-            if (_cursor.isNull(_cursorIndexOfIndex)) {
-              _tmpIndex = null;
-            } else {
-              _tmpIndex = _cursor.getString(_cursorIndexOfIndex);
-            }
-            _result = new Game(_tmpId,_tmpTeamA,_tmpTeamB,_tmpDate,_tmpScoreA,_tmpScoreB,_tmpIndex);
+            _result = new Game(_tmpId,_tmpTeamAName,_tmpTeamBName,_tmpTeamAScore,_tmpTeamBScore,_tmpDate);
           } else {
             _result = null;
           }

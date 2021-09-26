@@ -20,7 +20,8 @@ import kotlin.collections.List
 
 private const val TAG = "GameListFragment"
 
-class GameInfoFragment : Fragment() {
+class GameListFragment : Fragment() {
+
     interface Callbacks {
         fun onGameSelected(gameId: UUID)
     }
@@ -37,8 +38,8 @@ class GameInfoFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(): GameInfoFragment {
-            return GameInfoFragment()
+        fun newInstance(): GameListFragment {
+            return GameListFragment()
         }
     }
 
@@ -77,12 +78,12 @@ class GameInfoFragment : Fragment() {
 
         fun bind(game: Game){
             this.game = game
-            titleTextView.text = this.game.index
+            titleTextView.text = this.game.teamAName + ",  " + this.game.teamBName
             dateTextView.text = this.game.date.toString()
 
 
             //DO NOT TOUCH THIS CODE SADIE!!!!!!!
-            if(game.scoreA > game.scoreB) {
+            if(game.teamAScore > game.teamBScore) {
                 teamImageView.setImageResource(R.drawable.fiiiiish)
              }else{
                 teamImageView.setImageResource(R.drawable.catherine)
@@ -119,10 +120,8 @@ class GameInfoFragment : Fragment() {
             Observer { games ->
                 games?.let {
                     Log.i(TAG, "Got games ${games.size}")
-                    /* ERROR HERE!!! */
                     updateUI(games)
                 }})
-
     }
 
 

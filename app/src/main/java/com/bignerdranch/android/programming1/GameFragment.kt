@@ -57,6 +57,7 @@ class GameFragment: Fragment() {
 
     private lateinit var displayButton : Button
     private lateinit var saveButton : Button
+    private lateinit var cuteButton : Button
 
     private val crimeDetailViewModel: GameDetailViewModel by lazy {
         ViewModelProviders.of(this).get(GameDetailViewModel::class.java)
@@ -98,13 +99,11 @@ class GameFragment: Fragment() {
         infoButton = view.findViewById(R.id.info_button)
 
         teamA = view.findViewById(R.id.teamA)
-        teamB = view.findViewById(R.id.teamA)
+        teamB = view.findViewById(R.id.teamB)
 
         displayButton = view.findViewById(R.id.display_button)
         saveButton = view.findViewById(R.id.save_button)
-
-        //why is this intent red???? ***
-        //savePressed = intent.getBooleanExtra(BUTTON_PRESSED, false)
+        cuteButton = view.findViewById(R.id.cute_button)
 
         if(savedInstanceState != null){
             myBBallModel!!.setScore(true,savedInstanceState.getInt(KEY_SCORE_A, 0) )
@@ -159,17 +158,22 @@ class GameFragment: Fragment() {
             val intent = SecondActivity.newIntent(activity as MainActivity, savePressed)
             startActivityForResult(intent, REQUEST_CODE_SECOND)
 
-            gModel?.saveGame(teamA.toString(), teamB.toString())
+            gModel?.saveGame(teamA.toString(), teamB.toString(), Integer.parseInt(scoreA.text as String), Integer.parseInt(scoreB.text as String))
 
             // why is the application context red? ***
             Toast.makeText(activity as MainActivity, "Game Information Saved!", Toast.LENGTH_SHORT).show()
         }
 
+        cuteButton.setOnClickListener{
+            cuteButton.visibility = View.GONE
+            Toast.makeText(activity as MainActivity, "Cute Dog!", Toast.LENGTH_SHORT).show()
+        }
+
         return view }
 
     private fun updateUI() {
-        teamA.setText(game.teamA)
-        teamB.setText(game.teamB)
+        teamA.setText(game.teamAName)
+        teamB.setText(game.teamBName)
         //*! may need to add a date field? look at pg 254
     }
 
@@ -229,7 +233,7 @@ class GameFragment: Fragment() {
                 before: Int,
                 count: Int
             ) {
-                 game.teamA = sequence.toString()
+                 game.teamBName = sequence.toString()
             }
 
             override fun afterTextChanged(sequence: Editable?) {
@@ -254,7 +258,7 @@ class GameFragment: Fragment() {
                 before: Int,
                 count: Int
             ) {
-                game.teamB = sequence.toString()
+                game.teamBName = sequence.toString()
             }
 
             override fun afterTextChanged(sequence: Editable?) {
