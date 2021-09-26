@@ -119,7 +119,8 @@ class GameInfoFragment : Fragment() {
             Observer { games ->
                 games?.let {
                     Log.i(TAG, "Got games ${games.size}")
-                    //updateUI(games)
+                    /* ERROR HERE!!! */
+                    updateUI(games)
                 }})
 
     }

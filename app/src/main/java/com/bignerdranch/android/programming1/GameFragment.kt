@@ -167,6 +167,12 @@ class GameFragment: Fragment() {
 
         return view }
 
+    private fun updateUI() {
+        teamA.setText(game.teamA)
+        teamB.setText(game.teamB)
+        //*! may need to add a date field? look at pg 254
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         crimeDetailViewModel.gameLiveData.observe(
@@ -177,11 +183,7 @@ class GameFragment: Fragment() {
                     updateUI() }
             }) }
 
-    private fun updateUI() {
-        teamA.setText(game.teamA)
-        teamB.setText(game.teamB)
-        //*! may need to add a date field? look at pg 254
-    }
+
 
     fun updateScore(aBool : Boolean, value :Int ){
 
