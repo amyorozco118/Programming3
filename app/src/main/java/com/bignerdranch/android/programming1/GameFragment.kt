@@ -25,11 +25,14 @@ import java.util.*
 private const val REQUEST_CODE_SECOND = 0
 private const val REQUEST_CODE_DISPLAYBTN = 1
 
-private const val BUTTON_PRESSED = "com.bignerdranch.android.programming1.button_pressed"
-private const val ARG_GAME_ID = "game_id"
+private const val ARG_GAME_ID = "id"
 private const val TAG = "GameFragment"
 
 class GameFragment: Fragment() {
+
+    interface Callbacks {
+        fun onGameListClicked()
+    }
 
     var myBBallModel: BBallModel? =  BBallModel()
     var gModel: GameInfoModel? =  GameInfoModel()
@@ -51,13 +54,15 @@ class GameFragment: Fragment() {
     private  val KEY_SCORE_A = "bundle_score_a"
     private  val KEY_SCORE_B = "bundle_score_b"
     private var savePressed = false
+    private var displayPressed = false
+
 
     private lateinit var teamA : EditText
     private lateinit var teamB : EditText
 
     private lateinit var displayButton : Button
     private lateinit var saveButton : Button
-    private lateinit var cuteButton : Button
+
 
     private val crimeDetailViewModel: GameDetailViewModel by lazy {
         ViewModelProviders.of(this).get(GameDetailViewModel::class.java)
@@ -67,8 +72,18 @@ class GameFragment: Fragment() {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "Fragment Started")
         game = Game()
-        val gameId: UUID = arguments?.getSerializable(ARG_GAME_ID) as UUID
-        crimeDetailViewModel.loadGame(gameId)
+        //reading from bundle
+        val gameId: UUID? = arguments?.getSerializable(ARG_GAME_ID) as? UUID
+        if(gameId == null){
+
+            game.teamAName = "teamA"
+            game.teamBName = "teamB"
+            game.teamAScore = 0
+            game.teamBScore = 0
+
+        }else {
+            crimeDetailViewModel.loadGame(gameId)
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -103,7 +118,7 @@ class GameFragment: Fragment() {
 
         displayButton = view.findViewById(R.id.display_button)
         saveButton = view.findViewById(R.id.save_button)
-        cuteButton = view.findViewById(R.id.cute_button)
+
 
         if(savedInstanceState != null){
             myBBallModel!!.setScore(true,savedInstanceState.getInt(KEY_SCORE_A, 0) )
@@ -150,8 +165,9 @@ class GameFragment: Fragment() {
         }
 
         displayButton.setOnClickListener{
-            val intent = SecondActivity.newIntent(activity as MainActivity, savePressed)
-            startActivityForResult(intent, REQUEST_CODE_SECOND)
+            (activity as MainActivity).onGameListClicked()
+           // startActivityForResult(intent, REQUEST_CODE_DISPLAYBTN)
+
         }
 
         saveButton.setOnClickListener {
@@ -160,21 +176,17 @@ class GameFragment: Fragment() {
 
             gModel?.saveGame(teamA.toString(), teamB.toString(), Integer.parseInt(scoreA.text as String), Integer.parseInt(scoreB.text as String))
 
-            // why is the application context red? ***
             Toast.makeText(activity as MainActivity, "Game Information Saved!", Toast.LENGTH_SHORT).show()
         }
 
-        cuteButton.setOnClickListener{
-            cuteButton.visibility = View.GONE
-            Toast.makeText(activity as MainActivity, "Cute Dog!", Toast.LENGTH_SHORT).show()
-        }
 
         return view }
 
     private fun updateUI() {
         teamA.setText(game.teamAName)
         teamB.setText(game.teamBName)
-        //*! may need to add a date field? look at pg 254
+        scoreA.text = ((game.teamAScore).toString())
+        scoreB.text = ((game.teamBScore).toString())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -185,7 +197,8 @@ class GameFragment: Fragment() {
                 game?.let {
                     this.game = game
                     updateUI() }
-            }) }
+            })
+    }
 
 
 
@@ -211,6 +224,7 @@ class GameFragment: Fragment() {
         if(requestCode == REQUEST_CODE_SECOND){
             myBBallModel?.savePressed = data?.getBooleanExtra(SAVE_BUTTON_KEY, false) ?: false
         }
+
     }
 
     override fun onStart() {

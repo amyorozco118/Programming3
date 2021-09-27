@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bignerdranch.android.programming1.GameFragment
 import com.bignerdranch.android.programming1.R
 import java.util.*
 import kotlin.collections.List
@@ -25,6 +26,18 @@ class GameListFragment : Fragment() {
     interface Callbacks {
         fun onGameSelected(gameId: UUID)
     }
+
+    /*
+    companion object {
+        fun newInstance(gameID: UUID): GameFragment {
+            val args = Bundle().apply {
+                putSerializable(ARG_GAME_ID, gameID)
+            }
+            return GameFragment().apply {
+                arguments = args
+            }
+        } }*/
+
     private var callbacks: Callbacks? = null
     private lateinit var gameRecyclerView: RecyclerView
     private var adapter: GameAdapter? = GameAdapter(emptyList())
@@ -37,11 +50,6 @@ class GameListFragment : Fragment() {
         callbacks = context as Callbacks?
     }
 
-    companion object {
-        fun newInstance(): GameListFragment {
-            return GameListFragment()
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -78,7 +86,8 @@ class GameListFragment : Fragment() {
 
         fun bind(game: Game){
             this.game = game
-            titleTextView.text = this.game.teamAName + ",  " + this.game.teamBName
+            var texttoset : String = this.game.teamAName + ",  " + this.game.teamBName
+            titleTextView.text = texttoset
             dateTextView.text = this.game.date.toString()
 
 

@@ -12,6 +12,7 @@
         android:name = "com.bignerdranch.android.gameintent.GameIntentApplication">
 
         <activity android:name=".SecondActivity"></activity>
+        <activity android:name=".DisplayActivity"></activity>
 
         <activity
             android:name=".MainActivity"
