@@ -154,10 +154,10 @@ class GameFragment: Fragment() {
         }
 
         infoButton.setOnClickListener{
-//            Toast.makeText(applicationContext,"If a shot is successfully scored from outside of the three-point line, three points are awarded.\n" +
-//                    "If a shot is successfully scored from inside of the three-point line, two points are awarded.\n" +
-//                    "If a team is awarded a technical foul then they will receive between one and three free shots. Each shot scored will be awarded with one point.",
-//                Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,"If a shot is successfully scored from outside of the three-point line, three points are awarded.\n" +
+                    "If a shot is successfully scored from inside of the three-point line, two points are awarded.\n" +
+                 "If a team is awarded a technical foul then they will receive between one and three free shots. Each shot scored will be awarded with one point.",
+                Toast.LENGTH_SHORT).show()
         }
 
         displayButton.setOnClickListener{
@@ -198,13 +198,9 @@ class GameFragment: Fragment() {
             })
     }
 
-
-
     fun updateScore(aBool : Boolean, value :Int ){
 
         myBBallModel?.addToScore(aBool, value)
-
-
         scoreA.text = (myBBallModel?.getScore(true))
         scoreB.text = (myBBallModel?.getScore(false))
 
