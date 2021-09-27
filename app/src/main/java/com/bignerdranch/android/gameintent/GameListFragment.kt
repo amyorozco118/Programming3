@@ -13,17 +13,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bignerdranch.android.programming1.GameFragment
 import com.bignerdranch.android.programming1.R
 import java.util.*
 import kotlin.collections.List
 
 
 private const val TAG = "GameListFragment"
+private const val ARG_GAMELIST_ID = "Q"
 
 class GameListFragment : Fragment() {
 
     interface Callbacks {
         fun onGameClicked(gameId: UUID)
+
     }
 
     private var callbacks: Callbacks? = null
@@ -36,6 +39,17 @@ class GameListFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         callbacks = context as Callbacks?
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        //reading from bundle
+        val teamAWins: Boolean? = arguments?.getSerializable(ARG_GAMELIST_ID) as? Boolean
+
+        if(teamAWins != null){
+            gameInfoModel.isTeamAWinning = teamAWins
+        }
+
     }
 
     override fun onCreateView(
@@ -97,6 +111,17 @@ class GameListFragment : Fragment() {
         }
     }
 
+    companion object {
+        fun newInstance(teamAWinning: Boolean): GameListFragment {
+            val args = Bundle().apply {
+                putSerializable(ARG_GAMELIST_ID, teamAWinning)
+            }
+            return GameListFragment().apply {
+                arguments = args
+            }
+        }
+    }
+
     private inner class GameAdapter(var games: List<Game>)
         : RecyclerView.Adapter<GameHolder>() {
 
@@ -115,7 +140,7 @@ class GameListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        gameInfoModel.gameListLiveData.observe(
+        gameInfoModel.gameListLiveData().observe(
             viewLifecycleOwner,
             Observer { games ->
                 games?.let {

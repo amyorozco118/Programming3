@@ -31,8 +31,9 @@ class MainActivity : AppCompatActivity(), GameListFragment.Callbacks, GameFragme
             .replace(R.id.fragment_container, fragment)
             .addToBackStack(null).commit()
     }
-    override fun onGameListClicked() {
-        val fragment = GameListFragment()
+
+    override fun onGameListClicked(teamAWinning : Boolean) {
+        val fragment = GameListFragment.newInstance(teamAWinning)
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
             .addToBackStack(null).commit()

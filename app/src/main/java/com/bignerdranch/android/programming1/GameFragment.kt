@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.bignerdranch.android.gameintent.Game
 import com.bignerdranch.android.gameintent.GameDetailViewModel
 import com.bignerdranch.android.gameintent.GameInfoModel
+import com.bignerdranch.android.gameintent.GameRepository
 import java.util.*
 
 private const val REQUEST_CODE_SECOND = 0
@@ -31,7 +32,7 @@ class GameFragment: Fragment() {
 
     interface Callbacks {
         //get only one team's games
-        fun onGameListClicked()
+        fun onGameListClicked(bool:Boolean)
     }
 
     var myBBallModel: BBallModel? =  BBallModel()
@@ -164,15 +165,17 @@ class GameFragment: Fragment() {
         displayButton.setOnClickListener{
             //take game score from a and b
             //compare if a > b or other
-
-
             if(game.teamAScore > game.teamBScore){
                 teamAWinning = true
             }else{
                 teamAWinning = false
             }
 
-            (activity as MainActivity).onGameListClicked()
+            (activity as MainActivity).onGameListClicked(teamAWinning)
+
+            gInfoModel?.saveGame(game, teamA.text.toString(), teamB.text.toString(), Integer.parseInt(scoreA.text as String), Integer.parseInt(scoreB.text as String))
+            gameDetailViewModel.saveGame(game)
+
         }
 
         saveButton.setOnClickListener {
@@ -184,6 +187,10 @@ class GameFragment: Fragment() {
             Toast.makeText(activity as MainActivity, "Game Information Saved!", Toast.LENGTH_SHORT).show()
         }
         return view }
+
+    fun getIsTeamAWinning() : Boolean{
+        return teamAWinning
+    }
 
     private fun updateUI() {
         teamA.setText(game.teamAName)
@@ -291,7 +298,8 @@ class GameFragment: Fragment() {
             return GameFragment().apply {
                 arguments = args
             }
-        } }
+        }
+    }
 
     override fun onStop() {
         super.onStop()
