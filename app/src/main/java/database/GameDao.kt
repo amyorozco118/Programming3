@@ -7,7 +7,6 @@ import androidx.room.Update
 
 import com.bignerdranch.android.gameintent.Game;
 
-import java.util.List;
 import java.util.UUID;
 
 @Dao

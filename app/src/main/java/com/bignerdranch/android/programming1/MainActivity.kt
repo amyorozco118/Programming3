@@ -24,7 +24,6 @@ class MainActivity : AppCompatActivity(), GameListFragment.Callbacks, GameFragme
                    .add(R.id.fragment_container, fragment)
                    .commit()
            }
-
        }
 
     override fun onGameClicked(gameId: UUID) {
@@ -39,7 +38,4 @@ class MainActivity : AppCompatActivity(), GameListFragment.Callbacks, GameFragme
             .replace(R.id.fragment_container, fragment)
             .addToBackStack(null).commit()
     }
-
-
-
 }

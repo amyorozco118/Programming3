@@ -26,17 +26,6 @@ class GameListFragment : Fragment() {
         fun onGameClicked(gameId: UUID)
     }
 
-    /*
-    companion object {
-        fun newInstance(gameID: UUID): GameFragment {
-            val args = Bundle().apply {
-                putSerializable(ARG_GAME_ID, gameID)
-            }
-            return GameFragment().apply {
-                arguments = args
-            }
-        } }*/
-
     private var callbacks: Callbacks? = null
     private lateinit var gameRecyclerView: RecyclerView
     private var adapter: GameAdapter? = GameAdapter(emptyList())
@@ -84,10 +73,14 @@ class GameListFragment : Fragment() {
         }
 
         fun bind(game: Game){
+
             this.game = game
+
             var texttoset : String = this.game.teamAName + ",  " + this.game.teamBName
             titleTextView.text = texttoset
             dateTextView.text = this.game.date.toString()
+            var scoreTextToSet : String = this.game.teamAScore.toString() + " : " + this.game.teamBScore.toString()
+            scoreTextView.text = scoreTextToSet
 
 
             //DO NOT TOUCH THIS CODE SADIE!!!!!!!
@@ -119,7 +112,8 @@ class GameListFragment : Fragment() {
         override fun onBindViewHolder(holder: GameHolder, position: Int) {
             val game = games[position]
             holder.bind(game)
-        } }
+        }
+        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

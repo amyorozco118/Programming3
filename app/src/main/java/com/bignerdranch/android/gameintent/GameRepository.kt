@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.room.Room
 import database.GameDatabase
 import java.util.*
-import java.util.List
 import java.util.concurrent.Executors
 
 private const val DATABASE_NAME = "game-database"

@@ -23,7 +23,6 @@ import com.bignerdranch.android.gameintent.GameInfoModel
 import java.util.*
 
 private const val REQUEST_CODE_SECOND = 0
-private const val REQUEST_CODE_DISPLAYBTN = 1
 
 private const val ARG_GAME_ID = "id"
 private const val TAG = "GameFragment"
@@ -96,7 +95,7 @@ class GameFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
-        resetButton = view.findViewById(R.id.reset_button)
+        resetButton = view.findViewById(R.id.button_reset)
         scoreA = view.findViewById(R.id.scoreA)
         scoreB = view.findViewById(R.id.scoreB)
 
