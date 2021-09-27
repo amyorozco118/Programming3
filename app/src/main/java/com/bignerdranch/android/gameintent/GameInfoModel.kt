@@ -1,7 +1,6 @@
 package com.bignerdranch.android.gameintent
 
 import androidx.lifecycle.ViewModel
-import kotlin.random.Random
 
 class GameInfoModel : ViewModel(){
 
@@ -16,7 +15,5 @@ class GameInfoModel : ViewModel(){
         game.teamAScore = teamAScore
         game.teamBScore = teamBScore
         listOfGames += game
-
-
     }
 }

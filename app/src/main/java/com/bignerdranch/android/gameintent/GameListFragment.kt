@@ -13,7 +13,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bignerdranch.android.programming1.GameFragment
 import com.bignerdranch.android.programming1.R
 import java.util.*
 import kotlin.collections.List
@@ -24,7 +23,7 @@ private const val TAG = "GameListFragment"
 class GameListFragment : Fragment() {
 
     interface Callbacks {
-        fun onGameSelected(gameId: UUID)
+        fun onGameClicked(gameId: UUID)
     }
 
     /*
@@ -102,7 +101,7 @@ class GameListFragment : Fragment() {
         }
 
         override fun onClick(p0: View?) {
-            callbacks?.onGameSelected(game.id)
+            callbacks?.onGameClicked(game.id)
         }
     }
 

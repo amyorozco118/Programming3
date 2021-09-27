@@ -37,12 +37,13 @@ class SecondActivity : AppCompatActivity() {
         }
     }
 
+    /*
     private fun setResultOfSave(savePressed:Boolean){
         val data = Intent().apply{
             putExtra(SAVE_BUTTON_KEY, savePressed)
         }
         setResult(Activity.RESULT_OK, data)
-    }
+    }*/
 
 
 }

@@ -64,7 +64,7 @@ class GameFragment: Fragment() {
     private lateinit var saveButton : Button
 
 
-    private val crimeDetailViewModel: GameDetailViewModel by lazy {
+    private val gameDetailViewModel: GameDetailViewModel by lazy {
         ViewModelProviders.of(this).get(GameDetailViewModel::class.java)
     }
 
@@ -75,14 +75,13 @@ class GameFragment: Fragment() {
         //reading from bundle
         val gameId: UUID? = arguments?.getSerializable(ARG_GAME_ID) as? UUID
         if(gameId == null){
-
             game.teamAName = "teamA"
             game.teamBName = "teamB"
             game.teamAScore = 0
             game.teamBScore = 0
 
         }else {
-            crimeDetailViewModel.loadGame(gameId)
+            gameDetailViewModel.loadGame(gameId)
         }
     }
 
@@ -119,16 +118,13 @@ class GameFragment: Fragment() {
         displayButton = view.findViewById(R.id.display_button)
         saveButton = view.findViewById(R.id.save_button)
 
-
         if(savedInstanceState != null){
-            myBBallModel!!.setScore(true,savedInstanceState.getInt(KEY_SCORE_A, 0) )
-            myBBallModel!!.setScore(false, savedInstanceState.getInt(KEY_SCORE_B, 0))
-            updateScore(true, 0)
-            updateScore(false, 0)
+            myBBallModel?.setScore(true,savedInstanceState.getInt(KEY_SCORE_A) )
+            myBBallModel?.setScore(false, savedInstanceState.getInt(KEY_SCORE_B))
         }
 
         resetButton.setOnClickListener {this
-            myBBallModel!!.resetScore()
+            myBBallModel?.resetScore()
             updateScore(true, 0)
             updateScore(false, 0)
         }
@@ -187,11 +183,13 @@ class GameFragment: Fragment() {
         teamB.setText(game.teamBName)
         scoreA.text = ((game.teamAScore).toString())
         scoreB.text = ((game.teamBScore).toString())
+        myBBallModel?.setScore(true, game.teamAScore)
+        myBBallModel?.setScore(false, game.teamBScore)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        crimeDetailViewModel.gameLiveData.observe(
+        gameDetailViewModel.gameLiveData.observe(
             viewLifecycleOwner,
             Observer{ game ->
                 game?.let {
@@ -204,14 +202,12 @@ class GameFragment: Fragment() {
 
     fun updateScore(aBool : Boolean, value :Int ){
 
-        myBBallModel!!.updateScore(aBool, value)
-        if(aBool) {
-            scoreA.setText(myBBallModel!!.getScore(aBool))
+        myBBallModel?.addToScore(aBool, value)
 
-        }
-        else{
-            scoreB.setText(myBBallModel!!.getScore(aBool))
-        }
+
+        scoreA.text = (myBBallModel?.getScore(true))
+        scoreB.text = (myBBallModel?.getScore(false))
+
     }
 
     override fun onActivityResult(requestCode:Int, resultCode:Int, data:Intent?){
@@ -297,6 +293,6 @@ class GameFragment: Fragment() {
 
     override fun onStop() {
         super.onStop()
-        crimeDetailViewModel.saveGame(game)
+        gameDetailViewModel.saveGame(game)
     }
 }

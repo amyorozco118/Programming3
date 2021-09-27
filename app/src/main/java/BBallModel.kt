@@ -15,22 +15,22 @@ open class BBallModel : ViewModel() {
     var scoreA = 0
     var scoreB = 0
     var savePressed = false
-    init{
 
+    init{
 
     }
 
-     fun updateScore(Abool : Boolean, value: Int){
+    /**
+     * Adds to any given score
+     */
+     fun addToScore(Abool : Boolean, value: Int){
         if(Abool){
             scoreA +=value
         }
          else{
              scoreB+=value
         }
-
     }
-
-
 
     fun resetScore(){
         scoreA = 0
@@ -38,14 +38,13 @@ open class BBallModel : ViewModel() {
     }
 
     fun getScore(aBool : Boolean): String{
+
         if(aBool){
             return scoreA.toString()
         }
         else{
             return scoreB.toString()
         }
-
-
     }
 
     fun setScore(aBool : Boolean, value : Int){
@@ -55,7 +54,6 @@ open class BBallModel : ViewModel() {
         else{
             scoreB = value
         }
-
     }
 
     init {
