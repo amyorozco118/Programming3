@@ -35,7 +35,7 @@ class GameFragment: Fragment() {
     }
 
     var myBBallModel: BBallModel? =  BBallModel()
-    var gModel: GameInfoModel? =  GameInfoModel()
+    var gInfoModel: GameInfoModel? =  GameInfoModel()
     var game : Game = Game()
 
     private lateinit var threeButton: Button
@@ -54,8 +54,6 @@ class GameFragment: Fragment() {
     private  val KEY_SCORE_A = "bundle_score_a"
     private  val KEY_SCORE_B = "bundle_score_b"
     private var savePressed = false
-    private var displayPressed = false
-
 
     private lateinit var teamA : EditText
     private lateinit var teamB : EditText
@@ -75,10 +73,11 @@ class GameFragment: Fragment() {
         //reading from bundle
         val gameId: UUID? = arguments?.getSerializable(ARG_GAME_ID) as? UUID
         if(gameId == null){
-            game.teamAName = "teamA"
-            game.teamBName = "teamB"
+            game.teamAName = "Team A"
+            game.teamBName = "Team B"
             game.teamAScore = 0
             game.teamBScore = 0
+            gameDetailViewModel.addGame(game)
 
         }else {
             gameDetailViewModel.loadGame(gameId)
@@ -162,20 +161,16 @@ class GameFragment: Fragment() {
 
         displayButton.setOnClickListener{
             (activity as MainActivity).onGameListClicked()
-           // startActivityForResult(intent, REQUEST_CODE_DISPLAYBTN)
-
         }
 
         saveButton.setOnClickListener {
             val intent = SecondActivity.newIntent(activity as MainActivity, savePressed)
             startActivityForResult(intent, REQUEST_CODE_SECOND)
 
-            gModel?.saveGame(teamA.toString(), teamB.toString(), Integer.parseInt(scoreA.text as String), Integer.parseInt(scoreB.text as String))
+            gInfoModel?.saveGame(game, teamA.text.toString(), teamB.text.toString(), Integer.parseInt(scoreA.text as String), Integer.parseInt(scoreB.text as String))
 
             Toast.makeText(activity as MainActivity, "Game Information Saved!", Toast.LENGTH_SHORT).show()
         }
-
-
         return view }
 
     private fun updateUI() {
@@ -199,12 +194,11 @@ class GameFragment: Fragment() {
     }
 
     fun updateScore(aBool : Boolean, value :Int ){
-
         myBBallModel?.addToScore(aBool, value)
         scoreA.text = (myBBallModel?.getScore(true))
         scoreB.text = (myBBallModel?.getScore(false))
-
     }
+
 
     override fun onActivityResult(requestCode:Int, resultCode:Int, data:Intent?){
         super.onActivityResult(requestCode, resultCode, data)
@@ -239,7 +233,7 @@ class GameFragment: Fragment() {
                 before: Int,
                 count: Int
             ) {
-                 game.teamBName = sequence.toString()
+                 game.teamAName = sequence.toString()
             }
 
             override fun afterTextChanged(sequence: Editable?) {
@@ -273,7 +267,7 @@ class GameFragment: Fragment() {
         }
 
         teamA.addTextChangedListener(teamAWatcher)
-        teamB.addTextChangedListener(teamAWatcher)
+        teamB.addTextChangedListener(teamBWatcher)
 
     }
 

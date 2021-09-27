@@ -19,8 +19,6 @@ class GameRepository  private constructor(context:Context) {
     ).build()
 
     private val executor = Executors.newSingleThreadExecutor()
-
-
     private val gameDao = database.gameDao()
 
     fun getGames(): LiveData<List<Game>> = gameDao.getGames()
@@ -49,6 +47,5 @@ class GameRepository  private constructor(context:Context) {
             throw IllegalStateException("GameRepository must be initialized")
         }
     }
-
 
 }

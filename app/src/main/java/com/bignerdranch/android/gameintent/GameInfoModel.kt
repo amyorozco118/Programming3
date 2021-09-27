@@ -1,6 +1,7 @@
 package com.bignerdranch.android.gameintent
 
 import androidx.lifecycle.ViewModel
+import java.util.*
 
 class GameInfoModel : ViewModel(){
 
@@ -8,8 +9,7 @@ class GameInfoModel : ViewModel(){
     private val gameRepository = GameRepository.get()
     val gameListLiveData = gameRepository.getGames()
 
-    fun saveGame(teamAName : String, teamBName : String, teamAScore: Int, teamBScore :Int){
-        val game = Game()
+    fun saveGame(game : Game, teamAName : String, teamBName : String, teamAScore: Int, teamBScore :Int){
         game.teamAName = teamAName
         game.teamBName = teamBName
         game.teamAScore = teamAScore
