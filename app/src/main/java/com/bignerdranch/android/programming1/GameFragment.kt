@@ -30,6 +30,7 @@ private const val TAG = "GameFragment"
 class GameFragment: Fragment() {
 
     interface Callbacks {
+        //get only one team's games
         fun onGameListClicked()
     }
 
@@ -59,6 +60,8 @@ class GameFragment: Fragment() {
 
     private lateinit var displayButton : Button
     private lateinit var saveButton : Button
+
+    var teamAWinning :Boolean = false
 
 
     private val gameDetailViewModel: GameDetailViewModel by lazy {
@@ -159,6 +162,16 @@ class GameFragment: Fragment() {
         }
 
         displayButton.setOnClickListener{
+            //take game score from a and b
+            //compare if a > b or other
+
+
+            if(game.teamAScore > game.teamBScore){
+                teamAWinning = true
+            }else{
+                teamAWinning = false
+            }
+
             (activity as MainActivity).onGameListClicked()
         }
 

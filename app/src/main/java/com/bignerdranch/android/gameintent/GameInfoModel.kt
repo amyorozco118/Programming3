@@ -1,13 +1,14 @@
 package com.bignerdranch.android.gameintent
 
 import androidx.lifecycle.ViewModel
-import java.util.*
+import com.bignerdranch.android.programming1.MainActivity
 
-class GameInfoModel : ViewModel(){
+class GameInfoModel() : ViewModel(){
 
     val listOfGames = mutableListOf<Game>()
     private val gameRepository = GameRepository.get()
-    val gameListLiveData = gameRepository.getGames()
+    //we need this to be a variable
+    val gameListLiveData = gameRepository.getGames(true)
 
     fun saveGame(game : Game, teamAName : String, teamBName : String, teamAScore: Int, teamBScore :Int){
         game.teamAName = teamAName

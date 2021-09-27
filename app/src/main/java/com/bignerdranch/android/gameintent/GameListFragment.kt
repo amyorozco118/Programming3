@@ -38,7 +38,6 @@ class GameListFragment : Fragment() {
         callbacks = context as Callbacks?
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -112,8 +111,7 @@ class GameListFragment : Fragment() {
         override fun onBindViewHolder(holder: GameHolder, position: Int) {
             val game = games[position]
             holder.bind(game)
-        }
-        }
+        } }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -125,7 +123,6 @@ class GameListFragment : Fragment() {
                     updateUI(games)
                 }})
     }
-
 
     override fun onDetach() {
         super.onDetach()
