@@ -93,7 +93,6 @@ class GameListFragment : Fragment() {
             titleTextView.text = texttoset
             dateTextView.text = this.game.date.toString()
             var scoreTextToSet : String = this.game.teamAScore.toString() + " : " + this.game.teamBScore.toString()
-            scoreTextView.text = scoreTextToSet
 
 
             //DO NOT TOUCH THIS CODE SADIE!!!!!!!

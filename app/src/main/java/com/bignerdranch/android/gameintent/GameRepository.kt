@@ -1,9 +1,10 @@
-package com.bignerdranch.android.gameintent;
+package com.bignerdranch.android.gameintent
 
 import android.content.Context;
 import androidx.lifecycle.LiveData
 import androidx.room.Room
 import database.GameDatabase
+import java.io.File
 import java.util.*
 import java.util.concurrent.Executors
 
@@ -19,6 +20,9 @@ class GameRepository  private constructor(context:Context) {
 
     private val executor = Executors.newSingleThreadExecutor()
     private val gameDao = database.gameDao()
+    private val filesDir = context.applicationContext.filesDir
+
+    fun getPhotoFile(game: Game): File = File(filesDir, game.photoFileName)
 
     fun getGames(isTeamAWinning: Boolean): LiveData<List<Game>> = gameDao.getGames(isTeamAWinning)
     fun getGame(id: UUID): LiveData<Game?> = gameDao.getGame(id)

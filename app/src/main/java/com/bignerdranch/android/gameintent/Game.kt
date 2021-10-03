@@ -12,4 +12,8 @@ data class Game(@PrimaryKey val id: UUID = UUID.randomUUID(),
                 @ColumnInfo( name = "teamAScore") var teamAScore: Int = 0,
                 @ColumnInfo( name = "teamBScore") var teamBScore: Int = 0,
                 @ColumnInfo( name = "date") var date: Date = Date(),
-)
+
+){
+    val photoFileName
+        get() = "IMG_$id.jpg"
+}

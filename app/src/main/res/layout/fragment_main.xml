@@ -1,118 +1,188 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
 
 
 
-        <Button
-            android:id="@+id/info_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Information" />
+    <Button
+        android:id="@+id/info_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Information" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <EditText
-                    android:id="@+id/teamA"
+                android:orientation="horizontal"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp">
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:text="@string/teamA"  />
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:id="@+id/photoViewA"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:scaleType="centerInside"
+                            android:cropToPadding="true"
+                            android:background="@android:color/darker_gray"/>
+                        <EditText
+                            android:id="@+id/teamA"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:text="@string/teamA"  />
+                    </LinearLayout>
 
-                <TextView
-                    android:id="@+id/scoreA"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/score"
-                    android:textSize="20sp"/>
-
-                <Button
-                    android:id="@+id/three_pointsA"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/three_button" />
-
-                <Button
-                    android:id="@+id/two_pointsA"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/two_button" />
-
-                <Button
-                    android:id="@+id/free_throwA"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    android:text="@string/ft_button"/>
-
+                    <ImageButton
+                        android:id="@+id/photoButtonA"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:src="@android:drawable/ic_menu_camera" />
+                </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
+
+
+            <TextView
+                android:id="@+id/scoreA"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:text="@string/score"
+                android:textSize="20sp"/>
 
-                <EditText
-                    android:id="@+id/teamB"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:text="@string/teamB"  />
+            <Button
+                android:id="@+id/three_pointsA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/three_button" />
 
-                <TextView
-                    android:id="@+id/scoreB"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/scoreB"
-                    android:textSize="20sp" />
+            <Button
+                android:id="@+id/two_pointsA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/two_button" />
 
-                <Button
-                    android:id="@+id/three_pointsB"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/three_buttonB" />
+            <Button
+                android:id="@+id/free_throwA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
-                <Button
-                    android:id="@+id/two_pointsB"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/two_buttonB" />
+                android:text="@string/ft_button"/>
 
-                <Button
-                    android:id="@+id/free_throwB"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/ft_buttonB" />
-
-            </LinearLayout>
         </LinearLayout>
-        <Button
-            android:id="@+id/button_reset"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
 
-            android:text="@string/reset_button"/>
-        <Button
-            android:id="@+id/save_button"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:text="@string/save_button"/>
-        <Button
-            android:id="@+id/display_button"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:text="@string/display_button"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp">
 
+                <LinearLayout
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/photoViewB"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:background="@android:color/darker_gray"
+                            android:cropToPadding="true"
+                            android:scaleType="centerInside" />
+
+
+
+                        <EditText
+                            android:id="@+id/teamB"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:text="@string/teamB" />
+
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:id="@+id/photoButtonB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:src="@android:drawable/ic_menu_camera" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+
+            <TextView
+                android:id="@+id/scoreB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/scoreB"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/three_pointsB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/three_buttonB" />
+
+            <Button
+                android:id="@+id/two_pointsB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/two_buttonB" />
+
+            <Button
+                android:id="@+id/free_throwB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ft_buttonB" />
+
+        </LinearLayout>
     </LinearLayout>
+    <Button
+        android:id="@+id/button_reset"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+
+        android:text="@string/reset_button"/>
+    <Button
+        android:id="@+id/save_button"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:text="@string/save_button"/>
+    <Button
+        android:id="@+id/display_button"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:text="@string/display_button"/>
+
+</LinearLayout>
 
