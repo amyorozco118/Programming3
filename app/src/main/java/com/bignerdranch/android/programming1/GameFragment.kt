@@ -103,9 +103,6 @@ class GameFragment: Fragment() {
 
         }else {
             gameDetailViewModel.loadGame(gameId)
-
-
-
         }
     }
 
@@ -194,11 +191,7 @@ class GameFragment: Fragment() {
         displayButton.setOnClickListener{
             //take game score from a and b
             //compare if a > b or other
-            if(game.teamAScore > game.teamBScore){
-                teamAWinning = true
-            }else{
-                teamAWinning = false
-            }
+            teamAWinning = game.teamAScore > game.teamBScore
 
             (activity as MainActivity).onGameListClicked(teamAWinning)
 
@@ -240,7 +233,6 @@ class GameFragment: Fragment() {
                 photoViewA.setImageDrawable(null)
             }
 
-
             if (photoFileB.exists()) {
                 val bitmap = picUtil.getScaledBitmap(photoFileB.path, requireActivity())
                 photoViewB.setImageBitmap(bitmap)
@@ -257,14 +249,13 @@ class GameFragment: Fragment() {
             Observer{ game ->
                 game?.let {
                     this.game = game
-                    photoFileA =  gameDetailViewModel.getPhotoFileA(game)
+
+                    /*photoFileA =  gameDetailViewModel.getPhotoFileA(game)
                     photoFileB = gameDetailViewModel.getPhotoFileB(game)
-                    photoUriA = FileProvider.getUriForFile(requireActivity(),
-                        "com.bignerdranch.android.gameintent.fileprovider",
-                        photoFileA)
-                    photoUriB = FileProvider.getUriForFile(requireActivity(),
-                        "com.bignerdranch.android.gameintent.fileprovider",
-                        photoFileB)
+
+                    photoUriA = FileProvider.getUriForFile(requireActivity(),"com.bignerdranch.android.gameintent.FileProvider", photoFileA)
+                    photoUriB = FileProvider.getUriForFile(requireActivity(),"com.bignerdranch.android.gameintent.FileProvider", photoFileB)
+*/
                     updateUI() }
             })
     }
@@ -298,6 +289,16 @@ class GameFragment: Fragment() {
 
     override fun onStart() {
         super.onStart()
+
+        photoFileA =  gameDetailViewModel.getPhotoFileA(game)
+        photoFileB = gameDetailViewModel.getPhotoFileB(game)
+
+        //photoUriA = Uri.fromFile(photoFileA)
+        //photoUriB = Uri.fromFile(photoFileB)
+
+        photoUriA = FileProvider.getUriForFile(requireActivity(),"com.bignerdranch.android.gameintent.fileprovider", photoFileA)
+        photoUriB = FileProvider.getUriForFile(requireActivity(),"com.bignerdranch.android.gameintent.fileprovider", photoFileB)
+
 
         val teamAWatcher = object : TextWatcher {
 
@@ -362,7 +363,6 @@ class GameFragment: Fragment() {
                 isEnabled = false
             }
             setOnClickListener {
-
                 captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoUriA)
                 val cameraActivities: List<ResolveInfo> =
                     packageManager.queryIntentActivities(captureImage,
