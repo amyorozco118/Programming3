@@ -78,11 +78,14 @@ class GameFragment: Fragment() {
     private lateinit var photoButtonB: ImageButton
     private lateinit var photoViewB: ImageView
 
-    private lateinit var photoFile: File
-    private lateinit var photoUri: Uri
+    private lateinit var photoFileA: File
+    private lateinit var photoFileB: File
+    private lateinit var photoUriA: Uri
+    private lateinit var photoUriB: Uri
 
     private val gameDetailViewModel: GameDetailViewModel by lazy {
         ViewModelProviders.of(this).get(GameDetailViewModel::class.java)
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -100,6 +103,9 @@ class GameFragment: Fragment() {
 
         }else {
             gameDetailViewModel.loadGame(gameId)
+
+
+
         }
     }
 
@@ -222,26 +228,26 @@ class GameFragment: Fragment() {
         scoreB.text = ((game.teamBScore).toString())
         myBBallModel?.setScore(true, game.teamAScore)
         myBBallModel?.setScore(false, game.teamBScore)
-        updatePhotoView(teamAButton)
+        updatePhotoView()
     }
 
-    private fun updatePhotoView(isButtonA: Boolean) {
-        if(isButtonA == true ) {
-            if (photoFile.exists()) {
-                val bitmap = picUtil.getScaledBitmap(photoFile.path, requireActivity())
+    private fun updatePhotoView() {
+
+            if (photoFileA.exists()) {
+                val bitmap = picUtil.getScaledBitmap(photoFileA.path, requireActivity())
                 photoViewA.setImageBitmap(bitmap)
             } else {
                 photoViewA.setImageDrawable(null)
             }
-        }
-        else if (isButtonA == false){
-            if (photoFile.exists()) {
-                val bitmap = picUtil.getScaledBitmap(photoFile.path, requireActivity())
+
+
+            if (photoFileB.exists()) {
+                val bitmap = picUtil.getScaledBitmap(photoFileB.path, requireActivity())
                 photoViewB.setImageBitmap(bitmap)
             } else {
                 photoViewB.setImageDrawable(null)
             }
-        }
+
 
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -251,10 +257,14 @@ class GameFragment: Fragment() {
             Observer{ game ->
                 game?.let {
                     this.game = game
-                    photoFile = gameDetailViewModel.getPhotoFile(game)
-                    photoUri = FileProvider.getUriForFile(requireActivity(),
+                    photoFileA =  gameDetailViewModel.getPhotoFileA(game)
+                    photoFileB = gameDetailViewModel.getPhotoFileB(game)
+                    photoUriA = FileProvider.getUriForFile(requireActivity(),
                         "com.bignerdranch.android.gameintent.fileprovider",
-                        photoFile)
+                        photoFileA)
+                    photoUriB = FileProvider.getUriForFile(requireActivity(),
+                        "com.bignerdranch.android.gameintent.fileprovider",
+                        photoFileB)
                     updateUI() }
             })
     }
@@ -277,9 +287,11 @@ class GameFragment: Fragment() {
             myBBallModel?.savePressed = data?.getBooleanExtra(SAVE_BUTTON_KEY, false) ?: false
         }
         if (requestCode == REQUEST_PHOTO) {
-            requireActivity().revokeUriPermission(photoUri,
+            requireActivity().revokeUriPermission(photoUriA,
                 Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-            updatePhotoView(teamAButton)
+            requireActivity().revokeUriPermission(photoUriB,
+                Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+            updatePhotoView()//pass file
         }
 
     }
@@ -350,15 +362,15 @@ class GameFragment: Fragment() {
                 isEnabled = false
             }
             setOnClickListener {
-                teamAButton = true
-                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+
+                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoUriA)
                 val cameraActivities: List<ResolveInfo> =
                     packageManager.queryIntentActivities(captureImage,
                         PackageManager.MATCH_DEFAULT_ONLY)
                 for (cameraActivity in cameraActivities) {
                     requireActivity().grantUriPermission(
                         cameraActivity.activityInfo.packageName,
-                        photoUri,
+                        photoUriA,
                         Intent.FLAG_GRANT_WRITE_URI_PERMISSION)}
                 startActivityForResult(captureImage, REQUEST_PHOTO)
             }
@@ -373,20 +385,18 @@ class GameFragment: Fragment() {
                 isEnabled = false
             }
             setOnClickListener {
-                teamAButton = true
-                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoUriB)
                 val cameraActivities: List<ResolveInfo> =
                     packageManager.queryIntentActivities(captureImage,
                         PackageManager.MATCH_DEFAULT_ONLY)
                 for (cameraActivity in cameraActivities) {
                     requireActivity().grantUriPermission(
                 cameraActivity.activityInfo.packageName,
-                photoUri,
+                photoUriB,
                 Intent.FLAG_GRANT_WRITE_URI_PERMISSION)}
                 startActivityForResult(captureImage, REQUEST_PHOTO)
             }
         }
-
     }
 
     companion object {
@@ -407,6 +417,7 @@ class GameFragment: Fragment() {
 
     override fun onDetach() {
         super.onDetach()
-        requireActivity().revokeUriPermission(photoUri,Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+        requireActivity().revokeUriPermission(photoUriA,Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+        requireActivity().revokeUriPermission(photoUriB,Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
     }
 }

@@ -22,7 +22,8 @@ class GameRepository  private constructor(context:Context) {
     private val gameDao = database.gameDao()
     private val filesDir = context.applicationContext.filesDir
 
-    fun getPhotoFile(game: Game): File = File(filesDir, game.photoFileName)
+    fun getPhotoFileA(game: Game): File = File(filesDir, game.photoFileName)
+    fun getPhotoFileB(game: Game): File = File(filesDir, game.photoFileName)
 
     fun getGames(isTeamAWinning: Boolean): LiveData<List<Game>> = gameDao.getGames(isTeamAWinning)
     fun getGame(id: UUID): LiveData<Game?> = gameDao.getGame(id)
