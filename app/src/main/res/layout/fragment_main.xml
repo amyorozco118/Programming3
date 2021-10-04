@@ -44,18 +44,20 @@
                             android:scaleType="centerInside"
                             android:cropToPadding="true"
                             android:background="@android:color/darker_gray"/>
+
                         <EditText
                             android:id="@+id/teamA"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:inputType="text"
-                            android:text="@string/teamA"  />
+                            android:minHeight="48dp"
+                            android:text="@string/teamA" />
                     </LinearLayout>
 
                     <ImageButton
                         android:id="@+id/photoButtonA"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="45dp"
                         android:src="@android:drawable/ic_menu_camera" />
                 </LinearLayout>
             </LinearLayout>

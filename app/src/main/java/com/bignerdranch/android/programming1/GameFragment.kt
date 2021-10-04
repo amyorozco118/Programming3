@@ -23,12 +23,17 @@ import com.bignerdranch.android.gameintent.Game
 import com.bignerdranch.android.gameintent.GameDetailViewModel
 import com.bignerdranch.android.gameintent.GameInfoModel
 import com.bignerdranch.android.gameintent.GameRepository
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.File
 import java.util.*
 
 private const val REQUEST_CODE_SECOND = 0
 private const val REQUEST_PHOTO = 2
-
+private const val TAG1 = "WeathterFragment"
 private const val ARG_GAME_ID = "id"
 private const val TAG = "GameFragment"
 
@@ -43,6 +48,8 @@ class GameFragment: Fragment() {
     var gInfoModel: GameInfoModel? =  GameInfoModel()
     var game : Game = Game()
     var picUtil : PictureUtils = PictureUtils()
+
+
 
 
     private lateinit var threeButton: Button
@@ -93,6 +100,25 @@ class GameFragment: Fragment() {
         Log.d(TAG, "Fragment Started")
         game = Game()
         //reading from bundle
+        val retrofit: Retrofit = Retrofit.Builder()
+            .baseUrl("https://www.flickr.com/")
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .build()
+
+        val weatherApi: WeatherApi = retrofit.create(WeatherApi::class.java)
+        val weatherHomePageRequest: Call<String> = weatherApi.fetchContents()
+
+        weatherHomePageRequest.enqueue(object : Callback<String> {
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.e(TAG, "Failed to fetch photos", t)
+            }
+            override fun onResponse(
+                call: Call<String>,
+                response: Response<String>
+            ){
+                Log.d(TAG, "Response received: ${response.body()}")
+            }
+        })
         val gameId: UUID? = arguments?.getSerializable(ARG_GAME_ID) as? UUID
         if(gameId == null){
             game.teamAName = "Team A"
