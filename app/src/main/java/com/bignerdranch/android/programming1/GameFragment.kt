@@ -17,18 +17,12 @@ import androidx.fragment.app.Fragment
 import android.util.Log
 import android.widget.*
 import androidx.core.content.FileProvider
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bignerdranch.android.gameintent.Game
 import com.bignerdranch.android.gameintent.GameDetailViewModel
 import com.bignerdranch.android.gameintent.GameInfoModel
-import com.bignerdranch.android.gameintent.GameRepository
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.File
 import java.util.*
 
@@ -50,8 +44,6 @@ class GameFragment: Fragment() {
     var game : Game = Game()
     var picUtil : PictureUtils = PictureUtils()
     private lateinit var weatherApi : WeatherApi
-
-
 
 
     private lateinit var threeButton: Button
@@ -93,10 +85,10 @@ class GameFragment: Fragment() {
     private lateinit var photoUriB: Uri
 
     private lateinit var weatherView: TextView
+    private lateinit var JSONResponseString : String
 
     private val gameDetailViewModel: GameDetailViewModel by lazy {
         ViewModelProviders.of(this).get(GameDetailViewModel::class.java)
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,14 +97,15 @@ class GameFragment: Fragment() {
         game = Game()
         //reading from bundle
 
-
-
-        //val flickrHomePageRequest : Call<String> = weatherApi.fetchContents()
-        val weatherLiveData: LiveData<String> = WeatherFetcher().fetchContents()
-        weatherLiveData.observe(
+        val mainLiveData: MutableLiveData<MainResponse> = WeatherFetcher().fetchContents()
+        mainLiveData.observe(
             this,
-            Observer { responseString ->
-                Log.d(TAG1, "Response received: $responseString")
+            Observer { weatherItems ->
+                Log.d(TAG1, "Response received: $weatherItems")
+
+                //weatherItems.get(0)
+                weatherView.text = "Name: " + weatherItems.name + " Temp :" + weatherItems.main.temp
+
             })
         val gameId: UUID? = arguments?.getSerializable(ARG_GAME_ID) as? UUID
         if(gameId == null){
@@ -124,8 +117,6 @@ class GameFragment: Fragment() {
 
         }else {
             gameDetailViewModel.loadGame(gameId)
-
-
 
         }
     }
@@ -218,11 +209,7 @@ class GameFragment: Fragment() {
         displayButton.setOnClickListener{
             //take game score from a and b
             //compare if a > b or other
-            if(game.teamAScore > game.teamBScore){
-                teamAWinning = true
-            }else{
-                teamAWinning = false
-            }
+            teamAWinning = game.teamAScore > game.teamBScore
 
             (activity as MainActivity).onGameListClicked(teamAWinning)
 

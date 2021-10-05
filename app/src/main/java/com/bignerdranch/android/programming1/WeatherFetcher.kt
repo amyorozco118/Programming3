@@ -1,13 +1,12 @@
 package com.bignerdranch.android.programming1
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.converter.scalars.ScalarsConverterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 
 private const val TAG = "WeatherFetchr"
 class WeatherFetcher {
@@ -17,25 +16,29 @@ class WeatherFetcher {
     init {
         val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl("http://api.openweathermap.org/")
-            .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
         weatherApi = retrofit.create(WeatherApi::class.java)
     }
 
 
-    fun fetchContents(): LiveData<String> {
-        val responseLiveData: MutableLiveData<String> = MutableLiveData()
-        val weatherRequest: Call<String> = weatherApi.fetchContents()
-        weatherRequest.enqueue(object : Callback<String> {
-            override fun onFailure(call: Call<String>, t: Throwable) {
+    fun fetchContents(): MutableLiveData<MainResponse> {
+        val responseLiveData: MutableLiveData<MainResponse> = MutableLiveData()
+        val weatherRequest: Call<MainResponse> = weatherApi.fetchContents()
+
+        weatherRequest.enqueue(object : Callback<MainResponse> {
+
+            override fun onFailure(call: Call<MainResponse>, t: Throwable) {
                 Log.e(TAG, "Failed to fetch weather", t)
             }
+
             override fun onResponse(
-                call: Call<String>,
-                response: Response<String>
+                call: Call<MainResponse>,
+                response: Response<MainResponse>
             ){
                 Log.d(TAG, "Response received")
-                responseLiveData.value = response.body()
+                val mainResponse: MainResponse? = response.body()
+                responseLiveData.value = mainResponse
             }
         })
         return responseLiveData
