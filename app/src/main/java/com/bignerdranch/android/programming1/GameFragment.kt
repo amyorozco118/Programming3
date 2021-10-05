@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment
 import android.util.Log
 import android.widget.*
 import androidx.core.content.FileProvider
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bignerdranch.android.gameintent.Game
@@ -33,7 +34,7 @@ import java.util.*
 
 private const val REQUEST_CODE_SECOND = 0
 private const val REQUEST_PHOTO = 2
-private const val TAG1 = "WeathterFragment"
+private const val TAG1 = "WeatherFragment"
 private const val ARG_GAME_ID = "id"
 private const val TAG = "GameFragment"
 
@@ -48,6 +49,7 @@ class GameFragment: Fragment() {
     var gInfoModel: GameInfoModel? =  GameInfoModel()
     var game : Game = Game()
     var picUtil : PictureUtils = PictureUtils()
+    private lateinit var weatherApi : WeatherApi
 
 
 
@@ -90,6 +92,8 @@ class GameFragment: Fragment() {
     private lateinit var photoUriA: Uri
     private lateinit var photoUriB: Uri
 
+    private lateinit var weatherView: TextView
+
     private val gameDetailViewModel: GameDetailViewModel by lazy {
         ViewModelProviders.of(this).get(GameDetailViewModel::class.java)
 
@@ -100,25 +104,16 @@ class GameFragment: Fragment() {
         Log.d(TAG, "Fragment Started")
         game = Game()
         //reading from bundle
-        val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("https://www.flickr.com/")
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .build()
 
-        val weatherApi: WeatherApi = retrofit.create(WeatherApi::class.java)
-        val weatherHomePageRequest: Call<String> = weatherApi.fetchContents()
 
-        weatherHomePageRequest.enqueue(object : Callback<String> {
-            override fun onFailure(call: Call<String>, t: Throwable) {
-                Log.e(TAG, "Failed to fetch photos", t)
-            }
-            override fun onResponse(
-                call: Call<String>,
-                response: Response<String>
-            ){
-                Log.d(TAG, "Response received: ${response.body()}")
-            }
-        })
+
+        //val flickrHomePageRequest : Call<String> = weatherApi.fetchContents()
+        val weatherLiveData: LiveData<String> = WeatherFetcher().fetchContents()
+        weatherLiveData.observe(
+            this,
+            Observer { responseString ->
+                Log.d(TAG1, "Response received: $responseString")
+            })
         val gameId: UUID? = arguments?.getSerializable(ARG_GAME_ID) as? UUID
         if(gameId == null){
             game.teamAName = "Team A"
@@ -174,6 +169,9 @@ class GameFragment: Fragment() {
 
         photoButtonB = view.findViewById(R.id.photoButtonB) as ImageButton
         photoViewB = view.findViewById(R.id.photoViewB) as ImageView
+
+        weatherView = view.findViewById(R.id.weatherView)// not a button
+
 
         if(savedInstanceState != null){
             myBBallModel?.setScore(true,savedInstanceState.getInt(KEY_SCORE_A) )
@@ -259,13 +257,14 @@ class GameFragment: Fragment() {
 
     private fun updatePhotoView() {
 
+        if(teamAButton) {
             if (photoFileA.exists()) {
                 val bitmap = picUtil.getScaledBitmap(photoFileA.path, requireActivity())
                 photoViewA.setImageBitmap(bitmap)
             } else {
                 photoViewA.setImageDrawable(null)
             }
-
+        }else {
 
             if (photoFileB.exists()) {
                 val bitmap = picUtil.getScaledBitmap(photoFileB.path, requireActivity())
@@ -274,7 +273,7 @@ class GameFragment: Fragment() {
                 photoViewB.setImageDrawable(null)
             }
 
-
+        }
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -283,14 +282,7 @@ class GameFragment: Fragment() {
             Observer{ game ->
                 game?.let {
                     this.game = game
-                    photoFileA =  gameDetailViewModel.getPhotoFileA(game)
-                    photoFileB = gameDetailViewModel.getPhotoFileB(game)
-                    photoUriA = FileProvider.getUriForFile(requireActivity(),
-                        "com.bignerdranch.android.gameintent.fileprovider",
-                        photoFileA)
-                    photoUriB = FileProvider.getUriForFile(requireActivity(),
-                        "com.bignerdranch.android.gameintent.fileprovider",
-                        photoFileB)
+
                     updateUI() }
             })
     }
@@ -313,10 +305,14 @@ class GameFragment: Fragment() {
             myBBallModel?.savePressed = data?.getBooleanExtra(SAVE_BUTTON_KEY, false) ?: false
         }
         if (requestCode == REQUEST_PHOTO) {
-            requireActivity().revokeUriPermission(photoUriA,
-                Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+            if(teamAButton) {
+                requireActivity().revokeUriPermission(
+                    photoUriA,
+                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                )
+            }else{
             requireActivity().revokeUriPermission(photoUriB,
-                Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                Intent.FLAG_GRANT_WRITE_URI_PERMISSION)}
             updatePhotoView()//pass file
         }
 
@@ -379,6 +375,7 @@ class GameFragment: Fragment() {
         teamB.addTextChangedListener(teamBWatcher)
 
         photoButtonA.apply {
+            teamAButton = true
             val packageManager: PackageManager = requireActivity().packageManager
             val captureImage = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             val resolvedActivity: ResolveInfo? =
@@ -388,7 +385,10 @@ class GameFragment: Fragment() {
                 isEnabled = false
             }
             setOnClickListener {
-
+                photoFileA =  gameDetailViewModel.getPhotoFileA(game)
+                photoUriA = FileProvider.getUriForFile(requireActivity(),
+                    "com.bignerdranch.android.gameintent.fileprovider",
+                    photoFileA)
                 captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoUriA)
                 val cameraActivities: List<ResolveInfo> =
                     packageManager.queryIntentActivities(captureImage,
@@ -402,6 +402,7 @@ class GameFragment: Fragment() {
             }
         }
         photoButtonB.apply {
+
             val packageManager: PackageManager = requireActivity().packageManager
             val captureImage = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             val resolvedActivity: ResolveInfo? =
@@ -411,6 +412,11 @@ class GameFragment: Fragment() {
                 isEnabled = false
             }
             setOnClickListener {
+                teamAButton = false
+                photoFileB = gameDetailViewModel.getPhotoFileB(game)
+                photoUriB = FileProvider.getUriForFile(requireActivity(),
+                    "com.bignerdranch.android.gameintent.fileprovider",
+                    photoFileB)
                 captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoUriB)
                 val cameraActivities: List<ResolveInfo> =
                     packageManager.queryIntentActivities(captureImage,
