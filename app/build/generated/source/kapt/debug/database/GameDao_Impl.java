@@ -43,8 +43,7 @@ public final class GameDao_Impl implements GameDao {
 
       @Override
       public void bind(SupportSQLiteStatement stmt, Game value) {
-        final String _tmp;
-        _tmp = __gameTypeConverters.fromUUID(value.getId());
+        final String _tmp = __gameTypeConverters.fromUUID(value.getId());
         if (_tmp == null) {
           stmt.bindNull(1);
         } else {
@@ -62,8 +61,7 @@ public final class GameDao_Impl implements GameDao {
         }
         stmt.bindLong(4, value.getTeamAScore());
         stmt.bindLong(5, value.getTeamBScore());
-        final Long _tmp_1;
-        _tmp_1 = __gameTypeConverters.fromDate(value.getDate());
+        final Long _tmp_1 = __gameTypeConverters.fromDate(value.getDate());
         if (_tmp_1 == null) {
           stmt.bindNull(6);
         } else {
@@ -79,8 +77,7 @@ public final class GameDao_Impl implements GameDao {
 
       @Override
       public void bind(SupportSQLiteStatement stmt, Game value) {
-        final String _tmp;
-        _tmp = __gameTypeConverters.fromUUID(value.getId());
+        final String _tmp = __gameTypeConverters.fromUUID(value.getId());
         if (_tmp == null) {
           stmt.bindNull(1);
         } else {
@@ -98,15 +95,13 @@ public final class GameDao_Impl implements GameDao {
         }
         stmt.bindLong(4, value.getTeamAScore());
         stmt.bindLong(5, value.getTeamBScore());
-        final Long _tmp_1;
-        _tmp_1 = __gameTypeConverters.fromDate(value.getDate());
+        final Long _tmp_1 = __gameTypeConverters.fromDate(value.getDate());
         if (_tmp_1 == null) {
           stmt.bindNull(6);
         } else {
           stmt.bindLong(6, _tmp_1);
         }
-        final String _tmp_2;
-        _tmp_2 = __gameTypeConverters.fromUUID(value.getId());
+        final String _tmp_2 = __gameTypeConverters.fromUUID(value.getId());
         if (_tmp_2 == null) {
           stmt.bindNull(7);
         } else {
@@ -145,8 +140,7 @@ public final class GameDao_Impl implements GameDao {
     final String _sql = "SELECT * FROM table_game where (teamAScore > teamBScore) = (?)";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
     int _argIndex = 1;
-    final int _tmp;
-    _tmp = isTeamAWinning ? 1 : 0;
+    final int _tmp = isTeamAWinning ? 1 : 0;
     _statement.bindLong(_argIndex, _tmp);
     return __db.getInvalidationTracker().createLiveData(new String[]{"table_game"}, false, new Callable<List<Game>>() {
       @Override
@@ -215,8 +209,7 @@ public final class GameDao_Impl implements GameDao {
     final String _sql = "SELECT * FROM table_game WHERE id=(?)";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
     int _argIndex = 1;
-    final String _tmp;
-    _tmp = __gameTypeConverters.fromUUID(id);
+    final String _tmp = __gameTypeConverters.fromUUID(id);
     if (_tmp == null) {
       _statement.bindNull(_argIndex);
     } else {
