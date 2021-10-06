@@ -1,10 +1,15 @@
 package com.bignerdranch.android.programming1
 
 import BBallModel
+import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -16,6 +21,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import android.util.Log
 import android.widget.*
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.FileProvider
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -24,7 +32,10 @@ import com.bignerdranch.android.gameintent.Game
 import com.bignerdranch.android.gameintent.GameDetailViewModel
 import com.bignerdranch.android.gameintent.GameInfoModel
 import java.io.File
+import java.lang.String.format
 import java.util.*
+import kotlin.math.round
+import kotlin.math.roundToInt
 
 private const val REQUEST_CODE_SECOND = 0
 private const val REQUEST_PHOTO = 2
@@ -33,6 +44,7 @@ private const val ARG_GAME_ID = "id"
 private const val TAG = "GameFragment"
 
 class GameFragment: Fragment() {
+
 
     interface Callbacks {
         //get only one team's games
@@ -85,7 +97,6 @@ class GameFragment: Fragment() {
     private lateinit var photoUriB: Uri
 
     private lateinit var weatherView: TextView
-    private lateinit var JSONResponseString : String
 
     private val gameDetailViewModel: GameDetailViewModel by lazy {
         ViewModelProviders.of(this).get(GameDetailViewModel::class.java)
@@ -95,7 +106,6 @@ class GameFragment: Fragment() {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "Fragment Started")
         game = Game()
-        //reading from bundle
 
         val mainLiveData: MutableLiveData<MainResponse> = WeatherFetcher().fetchContents()
         mainLiveData.observe(
@@ -104,18 +114,24 @@ class GameFragment: Fragment() {
                 Log.d(TAG1, "Response received: $weatherItems")
 
                 //weatherItems.get(0)
-                weatherView.text = "Name: " + weatherItems.name + " Temp :" + weatherItems.main.temp
+                var tempFloat = weatherItems.main.temp.toDouble()
+                var fTemp = 0.0
+                fTemp = (tempFloat - 273.15) * 9 / 5 + 32
+                var temp = fTemp.toString()
+
+                weatherView.text =
+                    "Temperature in " + weatherItems.name + ": " + temp[0] + temp[1] + temp[2] + temp[3] + temp[4] + temp[5] + "* Fahrenheit"
 
             })
         val gameId: UUID? = arguments?.getSerializable(ARG_GAME_ID) as? UUID
-        if(gameId == null){
+        if (gameId == null) {
             game.teamAName = "Team A"
             game.teamBName = "Team B"
             game.teamAScore = 0
             game.teamBScore = 0
             gameDetailViewModel.addGame(game)
 
-        }else {
+        } else {
             gameDetailViewModel.loadGame(gameId)
 
         }
