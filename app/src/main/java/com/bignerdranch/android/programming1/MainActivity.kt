@@ -18,13 +18,11 @@ import java.util.*
 private  val TAG = "MainActivity"
 class MainActivity : AppCompatActivity(), GameListFragment.Callbacks, GameFragment.Callbacks, LocationListener{
 
-
-
     //LOCATION STUFF
 
     private lateinit var locationManager: LocationManager
-    lateinit var lat : String
-    lateinit var lon : String
+    var lati : String = "0"
+    var long : String = "0"
     private val locationPermissionCode = 2
 
     private fun getLocation() {
@@ -38,10 +36,10 @@ class MainActivity : AppCompatActivity(), GameListFragment.Callbacks, GameFragme
     }
 
     override fun onLocationChanged(location: Location) {
-        lat = location.latitude.toString()
-        lon = location.longitude.toString()
+        lati = location.latitude.toString()
+        long = location.longitude.toString()
 
-        Log.d(TAG, "LAT & LONG: " +lat+", "+lon)
+        Log.d(TAG, "LAT & LONG: " +lati+", "+long)
 
     }
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

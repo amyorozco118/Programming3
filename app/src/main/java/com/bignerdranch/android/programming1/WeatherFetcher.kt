@@ -7,6 +7,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Url
 
 private const val TAG = "WeatherFetchr"
 class WeatherFetcher {
@@ -21,10 +22,9 @@ class WeatherFetcher {
         weatherApi = retrofit.create(WeatherApi::class.java)
     }
 
-
-    fun fetchContents(): MutableLiveData<MainResponse> {
+    fun fetchContents(@Url url : String): MutableLiveData<MainResponse> {
         val responseLiveData: MutableLiveData<MainResponse> = MutableLiveData()
-        val weatherRequest: Call<MainResponse> = weatherApi.fetchContents()
+        val weatherRequest: Call<MainResponse> = weatherApi.fetchContents(url)
 
         weatherRequest.enqueue(object : Callback<MainResponse> {
 

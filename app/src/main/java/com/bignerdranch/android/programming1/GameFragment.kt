@@ -1,15 +1,12 @@
 package com.bignerdranch.android.programming1
 
 import BBallModel
-import android.Manifest
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
-import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -21,9 +18,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import android.util.Log
 import android.widget.*
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.FileProvider
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -32,10 +26,8 @@ import com.bignerdranch.android.gameintent.Game
 import com.bignerdranch.android.gameintent.GameDetailViewModel
 import com.bignerdranch.android.gameintent.GameInfoModel
 import java.io.File
-import java.lang.String.format
-import java.util.*
-import kotlin.math.round
-import kotlin.math.roundToInt
+import java.util.UUID
+
 
 private const val REQUEST_CODE_SECOND = 0
 private const val REQUEST_PHOTO = 2
@@ -43,8 +35,8 @@ private const val TAG1 = "WeatherFragment"
 private const val ARG_GAME_ID = "id"
 private const val TAG = "GameFragment"
 
-class GameFragment: Fragment() {
 
+class GameFragment: Fragment() {
 
     interface Callbacks {
         //get only one team's games
@@ -107,20 +99,45 @@ class GameFragment: Fragment() {
         Log.d(TAG, "Fragment Started")
         game = Game()
 
-        val mainLiveData: MutableLiveData<MainResponse> = WeatherFetcher().fetchContents()
+        var latitude = MainActivity().lati
+        var  longitude = MainActivity().long
+        var locUrl : String
+
+        val lat = latitude.toDouble()
+        val lon = longitude.toDouble()
+
+        Log.d(TAG, "GAME FRAGMENT LAT AND LONG: "+latitude+longitude)
+
+        var df = DecimalFormat("#.##")
+        df.roundingMode = RoundingMode.CEILING
+
+        latitude =df.format(lat)
+        longitude = df.format(lon)
+
+        if(latitude.equals("") || longitude.equals("")){
+            locUrl = "http://api.openweathermap.org/" + "data/2.5/weather?q=" + "London,uk" + "&appid=" + "205d86bed14ecd2289e59656c4b76a91"
+
+        }
+        else{
+            locUrl = "http://api.openweathermap.org/" + "data/2.5/weather?lat=" + latitude +"&lon=" + longitude + "&appid=" + "205d86bed14ecd2289e59656c4b76a91"
+
+        }
+
+        val mainLiveData: MutableLiveData<MainResponse> = WeatherFetcher().fetchContents(locUrl)
         mainLiveData.observe(
             this,
             Observer { weatherItems ->
                 Log.d(TAG1, "Response received: $weatherItems")
 
                 //weatherItems.get(0)
-                var tempFloat = weatherItems.main.temp.toDouble()
+                val tempFloat = weatherItems.main.temp.toDouble()
                 var fTemp = 0.0
                 fTemp = (tempFloat - 273.15) * 9 / 5 + 32
-                var temp = fTemp.toString()
+                var temp : String = fTemp.toString()
+                Log.d(TAG, "FTEMPTOSTRING" + temp)
 
                 weatherView.text =
-                    "Temperature in " + weatherItems.name + ": " + temp[0] + temp[1] + temp[2] + temp[3] + temp[4] + temp[5] + "* Fahrenheit"
+                   "Temperature in " + weatherItems.name + ": " + temp[0]+ temp[1]+temp[2]+temp[3]+temp[4]+temp[5] + "* Fahrenheit"
 
             })
         val gameId: UUID? = arguments?.getSerializable(ARG_GAME_ID) as? UUID
@@ -133,7 +150,6 @@ class GameFragment: Fragment() {
 
         } else {
             gameDetailViewModel.loadGame(gameId)
-
         }
     }
 
