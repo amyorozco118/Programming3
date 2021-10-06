@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
@@ -62,8 +63,10 @@
                     <ImageButton
                         android:id="@+id/photoButtonA"
                         android:layout_width="match_parent"
-                        android:layout_height="45dp"
-                        android:src="@android:drawable/ic_menu_camera" />
+                        android:layout_height="48dp"
+                        android:src="@drawable/ci"
+                        android:scaleType="fitXY"
+                        tools:ignore="SpeakableTextPresentCheck" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -140,8 +143,10 @@
                     <ImageButton
                         android:id="@+id/photoButtonB"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:src="@android:drawable/ic_menu_camera" />
+                        android:layout_height="48dp"
+                        android:src="@drawable/ci"
+                        android:scaleType="fitXY"
+                        />
                 </LinearLayout>
             </LinearLayout>
 
